@@ -1,4 +1,5 @@
 //functions.js
+let divPartida = document.getElementById("partida");
 let data = {
     "preguntes": [
       {
@@ -333,23 +334,24 @@ let data = {
       }
     ]
 }
+let contenidoHTML =" ";
 for (let index = 0; index < data.preguntes.length; index++) {
   let pregunta = data.preguntes[index].pregunta;
   let respostes = data.preguntes[index].respostes;
-  
-  document.write(`<div class="pregunta">${pregunta}</div><br>`);
+  contenidoHTML += `<div class="pregunta">${pregunta}</div><br>`;
+  contenidoHTML += `<br><img src="img/${data.preguntes[index].imatge}">`;
+  contenidoHTML += `<div class="respuestas">`;
 
-  document.write(`<br><img src="img/${data.preguntes[index].imatge}" class="question-image">`);
-
-  document.write(`<div class="respuestas">`);
   for (let i = 0; i < respostes.length; i++) {
       let respuesta = respostes[i];
-      document.write(`<button class="respuesta" onclick="mostrarSeleccion('${respuesta}')">${respuesta}</button>`);
+      contenidoHTML += `<button class="respuesta" onclick="mostrarSeleccion('${respuesta}')">${respuesta}</button>`;
   }
   
-  document.write(`</div>`); // Cerrar el div de respuestas
-  document.write("<br><br>");
+  contenidoHTML += `</div>`; 
+  contenidoHTML += "<br><br>";
 }
+
+divPartida.innerHTML = contenidoHTML;
 
 function mostrarSeleccion(opcion) {
   alert(`Has pulsado la opción: ${opcion}`);
