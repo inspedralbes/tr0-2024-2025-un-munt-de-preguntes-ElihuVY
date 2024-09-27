@@ -30,10 +30,7 @@ if (isset($_POST['respuesta'])) {
     $respuesta_usuario = intval($_POST['respuesta']);
     $respuesta_correcta = $pregunta_actual['resposta_correcta'];
 
-    $_SESSION['respuestas'][$indice] = $respuesta_usuario;
-
-    if ($respuesta_usuario == $respuesta_correcta) {
-        echo "<p style='color: green;'>¡Correcto!</p>";
+    $_SESSIOlet "<p style='color: green;'>¡Correcto!</p>";
         if ($_SESSION['puntuacion'] <= 10) { 
             $_SESSION['puntuacion']++;
         }

@@ -1,37 +1,72 @@
+let preguntas = [];
+let respuestasSeleccionadas = [];
+let indiceActual = 0;
 let divPartida = document.getElementById("partida");
 let divResultado = document.getElementById("resultado");
 
 function obtenerPreguntas(cantidad) {
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
-    .then(response => {
-      return response.json();
+    .then(response => response.json())
+    .then(data => {
+      preguntas = data;
+      mostrarPregunta(indiceActual); // Mostramos la primera pregunta
     })
-    .then(data => mostrarPreguntas(data));
+    .catch(error => console.error('Error al obtener preguntas:', error));
 }
 
-function mostrarPreguntas(data){
-  let contenidoHTML = "";
-  for (let index = 0; index < data.length; index++) {
-    let pregunta = data[index].pregunta;
-    let respostes = data[index].respostes;
-    contenidoHTML += `<div class="pregunta">${pregunta}</div><br>`;
-    contenidoHTML += `<br><img src="img/${data[index].imatge}" alt="Imagen de la pregunta">`;
-    contenidoHTML += `<div class="respuestas">`;
+function mostrarPregunta(indice) {
+  if (indice >= 0 && indice < preguntas.length) {
+    let pregunta = preguntas[indice].pregunta;
+    let respostes = preguntas[indice].respostes;
 
-    for (let i = 0; i < respostes.length; i++) {
-      let respuesta = respostes[i];
-      contenidoHTML += `<button class="respuesta" onclick="mostrarSeleccion('${respuesta}')">${respuesta}</button>`;
-    }
+    let contenidoHTML = `
+      <div class="pregunta">${pregunta}</div>
+      <div class="imagen-container">
+        <img src="img/${preguntas[indice].imatge}" alt="Imagen de la pregunta" class="imagen-pregunta">
+      </div>
+      <div class="respuestas-container">
+    `;
 
-    contenidoHTML += `</div>`; 
-    contenidoHTML += "<br><br>";
+    respostes.forEach((respuesta, i) => {
+      let seleccionada = respuestasSeleccionadas[indice] === i ? "seleccionada" : "";
+      contenidoHTML += `
+        <button class="respuesta ${seleccionada}" onclick="seleccionarRespuesta(${indice}, ${i})">
+          ${respuesta}
+        </button>
+      `;
+    });
+
+    contenidoHTML += `</div>`;
+    contenidoHTML += `
+      <div class="navegacion">
+        <button onclick="anteriorPregunta()" class="boton-nav">Anterior</button>
+        <button onclick="siguientePregunta()" class="boton-nav">Siguiente</button>
+      </div>
+    `;
+
+    divPartida.innerHTML = contenidoHTML;
   }
-  contenidoHTML += `<button onclick="finalizarQuiz()">Finalizar</button>`;
-  divPartida.innerHTML = contenidoHTML;
 }
+
 function seleccionarRespuesta(indice, opcion) {
-  respuestasSeleccionadas[indice] = opcion; // Guardar respuesta en el array
-  alert(`Has seleccionado la opción: ${opcion}`);
+  respuestasSeleccionadas[indice] = opcion; // Guardamos la respuesta seleccionada
+  mostrarPregunta(indice); // Volvemos a mostrar la pregunta para actualizar el marcado
+}
+
+function siguientePregunta() {
+  if (indiceActual < preguntas.length - 1) {
+    indiceActual++;
+    mostrarPregunta(indiceActual);
+  } else {
+    finalizarQuiz();
+  }
+}
+
+function anteriorPregunta() {
+  if (indiceActual > 0) {
+    indiceActual--;
+    mostrarPregunta(indiceActual);
+  }
 }
 
 function finalizarQuiz() {
@@ -43,14 +78,22 @@ function finalizarQuiz() {
     body: JSON.stringify(respuestasSeleccionadas),
   })
     .then(response => response.json())
-    .then(data => mostrarResultado(data))
+    .then(data => {
+      divPartida.innerHTML = `
+        <h2>Resultado del Test</h2>
+        <p>Total de respuestas: ${data.total}</p>
+        <p>Total correctas: ${data.correctas}</p>
+        <button onclick="reiniciarQuiz()">Reiniciar Test</button>
+      `;
+    })
     .catch(error => console.error('Error al finalizar el quiz:', error));
 }
 
-function mostrarResultado(data) {
-  divResultado.innerHTML = 
-  `<h2>Resultado:</h2>
-    <p>Total de respuestas: ${data.total}</p>
-    <p>Total correctas: ${data.correctas}</p>`;
+function reiniciarQuiz() {
+  indiceActual = 0;
+  respuestasSeleccionadas = [];
+  divResultado.innerHTML = '';
+  obtenerPreguntas(10);
 }
+
 obtenerPreguntas(10);

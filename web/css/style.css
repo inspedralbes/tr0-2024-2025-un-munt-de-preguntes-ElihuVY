@@ -8,49 +8,73 @@ body {
     font-family: Arial, sans-serif; 
 }
 
+h1 {
+    text-align: center;
+}
+
 .pregunta {
-    display: flex;
-    font-weight: bold;
-    font-size: 20px; 
-    justify-content: center; 
-}
-
-.respuestas {
-    display: flex;
-    justify-content: center; 
-    gap: 10px; /* Espacio entre botones */
+    font-size: 24px;
     margin-bottom: 20px;
+    text-align: center;
 }
-button {
-    display: flex;
-    padding: 10px 20px; 
-    font-size: 16px; 
-    margin: 5px; 
-    cursor: pointer; 
-    border-radius: 20px;
-    border: 2px solid #333;
-    
-}
-.oculto {
-    display: none;
-}
-button:hover{
-    color:black;
-    background-color: blueviolet;
-}
-h1{
-    color: aliceblue;
 
+.imagen-container {
+    text-align: center;
+    margin-bottom: 20px; /* Espacio entre la imagen y las respuestas */
 }
-h2{
-    color: aliceblue;
-}
-img{
+
+.imagen-pregunta {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
     display: block;
-    margin: 10px auto; 
-    max-width: 500px; 
-    height: auto;    
-    border: 2px solid #333;  /* Borde alrededor de la imagen */
-    border-radius: 10px;
-    margin-bottom: 40px;
+    margin: 0 auto;
+}
+
+.respuestas-container {
+    display: flex;
+    flex-direction: column; /* Coloca las respuestas en columna */
+    align-items: center; /* Centra las respuestas */
+    margin-bottom: 20px; /* Espacio debajo de las respuestas */
+}
+
+.respuesta {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 50%; /* Ajusta el ancho de los botones */
+}
+
+.respuesta:hover {
+    background-color: #45a049;
+}
+
+.respuesta.seleccionada {
+    background-color: #ff9800; /* Cambia de color al seleccionar */
+}
+
+.navegacion {
+    display: flex;
+    justify-content: space-between;
+    width: 50%; /* Ajusta el ancho de los botones de navegación */
+    margin: 20px auto;
+}
+
+.boton-nav {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.boton-nav:hover {
+    background-color: #1976D2;
 }
