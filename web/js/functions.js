@@ -28,7 +28,7 @@ function mostrarPregunta(indice) {
     `;
 
     respostes.forEach((respuesta, i) => {
-      let seleccionada = respuestasSeleccionadas[indice] === i ? "seleccionada" : "";
+      let seleccionada = respuestasSeleccionadas[indice] && respuestasSeleccionadas[indice].respuesta === i ? "seleccionada" : "";
       contenidoHTML += `
         <button class="respuesta ${seleccionada}" onclick="seleccionarRespuesta(${indice}, ${i})">
           ${respuesta}
@@ -49,7 +49,10 @@ function mostrarPregunta(indice) {
 }
 
 function seleccionarRespuesta(indice, opcion) {
-  respuestasSeleccionadas[indice] = opcion; // Guardamos la respuesta seleccionada
+  respuestasSeleccionadas[indice] = {
+    id: preguntas[indice].id, // Guardamos el id de la pregunta
+    respuesta: opcion         // Guardamos la respuesta seleccionada
+  };
   mostrarPregunta(indice); // Volvemos a mostrar la pregunta para actualizar el marcado
 }
 

@@ -10,17 +10,19 @@ body {
 
 h1 {
     text-align: center;
+    color: aliceblue;
 }
 
 .pregunta {
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
+    color: aliceblue;
 }
 
 .imagen-container {
     text-align: center;
-    margin-bottom: 20px; /* Espacio entre la imagen y las respuestas */
+    margin-bottom: 20px; 
 }
 
 .imagen-pregunta {
@@ -33,9 +35,9 @@ h1 {
 
 .respuestas-container {
     display: flex;
-    flex-direction: column; /* Coloca las respuestas en columna */
-    align-items: center; /* Centra las respuestas */
-    margin-bottom: 20px; /* Espacio debajo de las respuestas */
+    flex-direction: column;
+    align-items: center; 
+    margin-bottom: 20px; 
 }
 
 .respuesta {
@@ -52,17 +54,17 @@ h1 {
 }
 
 .respuesta:hover {
-    background-color: #45a049;
+    background-color: #05830c;
 }
 
 .respuesta.seleccionada {
-    background-color: #ff9800; /* Cambia de color al seleccionar */
+    background-color: #ff9800; 
 }
 
 .navegacion {
     display: flex;
     justify-content: space-between;
-    width: 50%; /* Ajusta el ancho de los botones de navegación */
+    width: 50%; 
     margin: 20px auto;
 }
 
