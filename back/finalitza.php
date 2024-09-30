@@ -1,28 +1,47 @@
 <?php
+session_start();  // Iniciar la sesión para acceder a las respuestas correctas
+
 header('Content-Type: application/json');
 
-$data = json_decode(file_get_contents("php://input"), true);
+// Verificamos si las respuestas correctas están en la sesión
+if (!isset($_SESSION['respuestas_correctas'])) {
+    echo json_encode([
+        'error' => 'No se encontraron respuestas correctas en la sesión.'
+    ]);
+    exit;
+}
 
-$datos = file_get_contents("data.json");
-$preguntas_array = json_decode($datos, true);
+// Obtener las respuestas correctas desde la sesión
+$respuestas_correctas = $_SESSION['respuestas_correctas'];
 
-$total_respuestas = count($data);
-$correctas = 0;
+// Obtener las respuestas del usuario desde la entrada (POST o JSON)
+$respuestas_usuario = json_decode(file_get_contents('php://input'), true);
 
-foreach ($data as $respuesta_usuario) {
-    $id_pregunta = $respuesta_usuario['id'];
-    $respuesta_seleccionada = $respuesta_usuario['respuesta'];
+// Verificamos si las respuestas del usuario se recibieron correctamente
+if (!isset($respuestas_usuario['respuestas']) || !is_array($respuestas_usuario['respuestas'])) {
+    echo json_encode([
+        'error' => 'Las respuestas del usuario no se recibieron correctamente.'
+    ]);
+    exit;
+}
 
-    foreach ($preguntas_array as $pregunta) {
-        if ($pregunta['id'] == $id_pregunta && $pregunta['resposta_correcta'] == $respuesta_seleccionada) {
-            $correctas++;
-            break;
-        }
+$respuestas_usuario = $respuestas_usuario['respuestas'];  // Accedemos al array de respuestas
+
+// Contador de respuestas correctas
+$respuestas_correctas_usuario = 0;
+$total_respuestas = count($respuestas_usuario);
+
+// Comparamos las respuestas del usuario con las correctas usando el índice de cada pregunta
+for ($i = 0; $i < $total_respuestas; $i++) {
+    // Verificar si el índice de la respuesta del usuario es correcto comparado con la respuesta correcta
+    if (isset($respuestas_correctas[$i]) && $respuestas_usuario[$i] == $respuestas_correctas[$i]) {
+        $respuestas_correctas_usuario++;
     }
 }
 
+// Devolver el resultado: número total y número de respuestas correctas
 echo json_encode([
     'total' => $total_respuestas,
-    'correctas' => $correctas
+    'correctas' => $respuestas_correctas_usuario
 ]);
 ?>

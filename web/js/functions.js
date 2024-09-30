@@ -14,6 +14,7 @@ function obtenerPreguntas(cantidad) {
     .catch(error => console.error('Error al obtener preguntas:', error));
 }
 
+// Mostrar la pregunta actual con sus respuestas
 function mostrarPregunta(indice) {
   if (indice >= 0 && indice < preguntas.length) {
     let pregunta = preguntas[indice].pregunta;
@@ -27,14 +28,14 @@ function mostrarPregunta(indice) {
       <div class="respuestas-container">
     `;
 
-    respostes.forEach((respuesta, i) => {
-      let seleccionada = respuestasSeleccionadas[indice] && respuestasSeleccionadas[indice].respuesta === i ? "seleccionada" : "";
+    // Generar botones de respuestas
+    for (let i = 0; i < respostes.length; i++) {
       contenidoHTML += `
-        <button class="respuesta ${seleccionada}" onclick="seleccionarRespuesta(${indice}, ${i})">
-          ${respuesta}
+        <button class="respuesta" onclick="seleccionarRespuesta(${indice}, ${i})">
+          ${respostes[i]}
         </button>
       `;
-    });
+    }
 
     contenidoHTML += `</div>`;
     contenidoHTML += `
@@ -49,10 +50,7 @@ function mostrarPregunta(indice) {
 }
 
 function seleccionarRespuesta(indice, opcion) {
-  respuestasSeleccionadas[indice] = {
-    id: preguntas[indice].id, // Guardamos el id de la pregunta
-    respuesta: opcion         // Guardamos la respuesta seleccionada
-  };
+  respuestasSeleccionadas[indice] = opcion;  // Guarda la respuesta seleccionada para esta pregunta
   mostrarPregunta(indice); // Volvemos a mostrar la pregunta para actualizar el marcado
 }
 
@@ -99,4 +97,5 @@ function reiniciarQuiz() {
   obtenerPreguntas(10);
 }
 
+// Inicializa el quiz
 obtenerPreguntas(10);
