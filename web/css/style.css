@@ -80,3 +80,20 @@ h1 {
 .boton-nav:hover {
     background-color: #1976D2;
 }
+
+.reiniciar{
+    background-color: #c54d4b; 
+    color: #ffffff; 
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 18px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.reiniciar:hover {
+    background-color: #bd6a6a; 
+}
+
