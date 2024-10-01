@@ -1,99 +1,152 @@
+/* General styles */
 body {
-    background-color: darkslategray;
+    background-color: #2C3E50; /* Fondo oscuro */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0;
-    font-family: Arial, sans-serif; 
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #ECF0F1; /* Texto claro */
+    height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+    box-sizing: border-box;
 }
 
 h1 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #F39C12; /* Título llamativo */
     text-align: center;
-    color: aliceblue;
 }
 
+/* Preguntas y respuestas */
 .pregunta {
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
-    color: aliceblue;
 }
 
 .imagen-container {
     text-align: center;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 .imagen-pregunta {
-    width: 100%;
-    max-width: 300px;
+    max-width: 100%; /* La imagen ocupa como máximo el 100% del contenedor */
     height: auto;
-    display: block;
-    margin: 0 auto;
+    width: 400px; /* Tamaño fijo de la imagen para evitar cambios de tamaño drásticos */
+    border-radius: 8px;
+    object-fit: contain; /* Se ajusta para que siempre se muestre bien */
 }
 
 .respuestas-container {
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    margin-bottom: 20px; 
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .respuesta {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #34495E;
     border: none;
     padding: 10px 20px;
-    text-align: center;
-    font-size: 16px;
-    margin: 10px 0;
+    margin: 5px 0;
+    color: #ECF0F1;
+    font-size: 18px;
     cursor: pointer;
-    border-radius: 4px;
-    width: 50%; /* Ajusta el ancho de los botones */
+    width: 100%;
+    max-width: 400px; /* Limita el tamaño máximo de los botones */
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 .respuesta:hover {
-    background-color: #05830c;
+    background-color: #1ABC9C;
 }
 
 .respuesta.seleccionada {
-    background-color: #ff9800; 
+    background-color: #27AE60; /* Respuesta seleccionada */
 }
 
+/* Estado de la partida */
+.estado-partida {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    margin-top: 20px;
+}
+
+.estado {
+    margin: 5px 10px; /* Espaciado entre los estados */
+    font-size: 16px;
+}
+
+/* Botones de navegación */
 .navegacion {
     display: flex;
     justify-content: space-between;
-    width: 50%; 
-    margin: 20px auto;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
 }
 
 .boton-nav {
-    background-color: #2196F3;
-    color: white;
-    padding: 10px 15px;
+    background-color: #3498DB;
     border: none;
-    border-radius: 5px;
+    padding: 10px 20px;
+    color: #ECF0F1;
+    font-size: 16px;
     cursor: pointer;
+    border-radius: 8px;
+    flex: 1; /* Toma todo el espacio disponible */
+    text-align: center;
+    margin: 0 5px; /* Espacio entre los botones */
 }
 
 .boton-nav:hover {
-    background-color: #1976D2;
+    background-color: #2980B9;
 }
-
-.reiniciar{
-    background-color: #c54d4b; 
-    color: #ffffff; 
+.estado-botones {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .estado-boton {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
     border: none;
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 18px;
-    margin: 10px 0;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 4px;
-}
-
-.reiniciar:hover {
-    background-color: #bd6a6a; 
-}
-
+    font-size: 16px;
+    color: white;
+  }
+  
+  .reiniciar-boton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: rgb(35, 35, 133);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .reiniciar-boton:hover {
+    background-color: rgb(34, 34, 112);
+  }
+  
+  .centrar-boton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .p{
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+  }
