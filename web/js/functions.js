@@ -17,7 +17,15 @@ function obtenerPreguntas(cantidad) {
   indiceActual = 0;
 
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
-    .then(response => response.json())
+    .then(response => {
+      // Imprimir la respuesta para depuración
+      console.log('Respuesta del servidor:', response);
+      return response.text(); // Cambiar a text() para ver qué está devolviendo el servidor
+    })
+    .then(text => {
+      console.log('Texto recibido:', text); // Imprimir el texto para ver si es válido
+      return JSON.parse(text); // Intenta convertirlo a JSON
+    })
     .then(data => {
       preguntas = data;
       estatDeLaPartida.preguntes = preguntas.map(pregunta => ({
@@ -30,6 +38,7 @@ function obtenerPreguntas(cantidad) {
     })
     .catch(error => console.error('Error al obtener preguntas:', error));
 }
+
 
 function mostrarPregunta(indice) {
   if (indice < 0 || indice >= preguntas.length) return; // Limitar rangos
@@ -115,6 +124,23 @@ function finalizarQuiz() {
       divPartida.innerHTML = '';
       divEstadoPartida.innerHTML = '';
 
+    // Mostrar solo el resultado final
+    let resultadoHTML = `<h3>Resultados</h3>`;
+    
+    // Mostrar total de correctas
+    resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
+    
+    // Botón para reiniciar el test, centrado
+    resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
+    
+    divResultado.innerHTML = resultadoHTML;
+
+    document.querySelector(".navegacion").style.display = "none";
+    
+    // Añadir el evento para reiniciar el test
+    document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
+  })
+  .catch(error => console.error('Error al finalizar el quiz:', error));
       let resultadoHTML = `<h3>Resultados</h3>`;
       resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
       resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
