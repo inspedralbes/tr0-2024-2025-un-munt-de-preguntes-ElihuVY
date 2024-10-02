@@ -149,9 +149,7 @@ function finalizarQuiz() {
       document.querySelector(".navegacion").style.display = "none";
 
       document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-    })
-    .catch(error => console.error('Error al finalizar el quiz:', error));
-}
+    }
 
 function reiniciarQuiz() {
   divResultado.innerHTML = ''; 

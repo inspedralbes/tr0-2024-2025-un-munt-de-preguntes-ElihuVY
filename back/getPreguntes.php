@@ -28,7 +28,7 @@ if ($result->num_rows > 0) {
                 $row['respuesta_1'],
                 $row['respuesta_2']
             ],
-            'resposta_correcta' => $row['resposta_correcta'],
+            'resposta_correcta' => $row['respuesta_correcta'],
             'imatge' => $row['imatge']
         ];
     }
