@@ -1,6 +1,5 @@
 <?php
-session_start(); 
-
+session_start();
 header('Content-Type: application/json');
 
 $respuestas_correctas = $_SESSION['respuestas_correctas'];
@@ -13,13 +12,12 @@ if (!isset($respuestas_usuario['respuestas']) || !is_array($respuestas_usuario['
     exit;
 }
 
-$respuestas_usuario = $respuestas_usuario['respuestas'];  
-
+$respuestas_usuario = $respuestas_usuario['respuestas'];
 $respuestas_correctas_usuario = 0;
 $total_respuestas = count($respuestas_usuario);
 
-for ($i = 0; $i < $total_respuestas; $i++) {
-    if (isset($respuestas_correctas[$i]) && $respuestas_usuario[$i] == $respuestas_correctas[$i]) {
+foreach ($respuestas_usuario as $pregunta_id => $respuesta_usuario) {
+    if (isset($respuestas_correctas[$pregunta_id]) && $respuesta_usuario == $respuestas_correctas[$pregunta_id]) {
         $respuestas_correctas_usuario++;
     }
 }
