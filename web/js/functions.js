@@ -20,7 +20,15 @@ function obtenerPreguntas(cantidad) {
   };
 
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
-    .then(response => response.json())
+    .then(response => {
+      // Imprimir la respuesta para depuración
+      console.log('Respuesta del servidor:', response);
+      return response.text(); // Cambiar a text() para ver qué está devolviendo el servidor
+    })
+    .then(text => {
+      console.log('Texto recibido:', text); // Imprimir el texto para ver si es válido
+      return JSON.parse(text); // Intenta convertirlo a JSON
+    })
     .then(data => {
       preguntas = data;
       estatDeLaPartida.preguntes = preguntas.map((pregunta) => ({
@@ -33,6 +41,7 @@ function obtenerPreguntas(cantidad) {
     })
     .catch(error => console.error('Error al obtener preguntas:', error));
 }
+
 
 function mostrarPregunta(indice) {
   if (indice >= 0 && indice < preguntas.length) {
@@ -166,7 +175,6 @@ function finalizarQuiz() {
     
     divResultado.innerHTML = resultadoHTML;
 
-    // Eliminar los botones de navegación
     document.querySelector(".navegacion").style.display = "none";
     
     // Añadir el evento para reiniciar el test
@@ -182,5 +190,4 @@ function reiniciarQuiz() {
   document.querySelector(".navegacion").style.display = "flex"; 
 }
 
-// Inicialmente cargamos 10 preguntas
 obtenerPreguntas(10);
