@@ -166,7 +166,6 @@ function finalizarQuiz() {
     
     divResultado.innerHTML = resultadoHTML;
 
-    // Eliminar los botones de navegación
     document.querySelector(".navegacion").style.display = "none";
     
     // Añadir el evento para reiniciar el test
@@ -182,5 +181,4 @@ function reiniciarQuiz() {
   document.querySelector(".navegacion").style.display = "flex"; 
 }
 
-// Inicialmente cargamos 10 preguntas
 obtenerPreguntas(10);
