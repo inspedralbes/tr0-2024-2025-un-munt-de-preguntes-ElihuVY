@@ -19,7 +19,7 @@ function obtenerPreguntas(cantidad) {
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
     .then(response => {
       console.log('Respuesta del servidor:', response);
-      return response.text(); // cambio a text() para ver qué está devolviendo el servidor
+      return response.text(); // cambiar a text() para ver qué está devolviendo el servidor
     })
     .then(text => {
       console.log('Texto recibido:', text); // Imprimir el texto para ver si es válido
@@ -40,31 +40,35 @@ function obtenerPreguntas(cantidad) {
 
 
 function mostrarPregunta(indice) {
-  if (indice < 0 || indice >= preguntas.length) return;
-
-  let pregunta = preguntas[indice].pregunta;
-  let respostes = preguntas[indice].respostes;
-  let contenidoHTML = `
-    <div class="pregunta">${pregunta}</div>
-    <div class="imagen-container">
-      <img src="img/${preguntas[indice].imatge}" alt="Imagen de la pregunta" class="imagen-pregunta">
-    </div>
-    <div class="respuestas-container">
-  `;
-
-  respostes.forEach((respuesta, i) => {
-    let fondoColor = respuestasSeleccionadas[indice] == i ? 'background-color: green;' : '';
-    contenidoHTML += `
-      <button class="respuesta" data-indice="${indice}" data-opcion="${i}" style="${fondoColor}">
-        ${respuesta}
-      </button>
+    if (indice < 0 || indice >= preguntas.length) return;
+  
+    let pregunta = preguntas[indice].pregunta;
+    let respostes = preguntas[indice].respostes;
+    let contenidoHTML = `
+      <div class="pregunta">${pregunta}</div>
+      <div class="imagen-container">
+        <img src="img/${preguntas[indice].imatge}" alt="Imagen de la pregunta" class="imagen-pregunta">
+      </div>
+      <div class="respuestas-container">
     `;
-  });
-
-  contenidoHTML += `</div>`;
-  divPartida.innerHTML = contenidoHTML;
-  actualizarEstadoPartida();
-}
+  
+    respostes.forEach((respuesta, i) => {
+      let fondoColor = ''; // no color
+      if (respuestasSeleccionadas[indice] == i) {
+        fondoColor = 'background-color: green;'; // seleccionada = verde
+      }
+      contenidoHTML += `
+        <button class="respuesta" data-indice="${indice}" data-opcion="${i}" style="${fondoColor}">
+          ${respuesta}
+        </button>
+      `;
+    });
+  
+    contenidoHTML += `</div>`;
+    divPartida.innerHTML = contenidoHTML;
+    actualizarEstadoPartida();
+  }
+  
 
 divPartida.addEventListener("click", function (event) {
   if (event.target.classList.contains("respuesta")) {
@@ -75,14 +79,20 @@ divPartida.addEventListener("click", function (event) {
 });
 
 function seleccionarRespuesta(indice, opcion) {
-  if (indice < 0 || indice >= preguntas.length) return; // Evitar índices inválidos
-
-  respuestasSeleccionadas[indice] = respuestasSeleccionadas[indice] === opcion ? null : opcion;
-  estatDeLaPartida.preguntes[indice].feta = respuestasSeleccionadas[indice] !== null;
-
-  mostrarPregunta(indice);
-  actualizarEstadoPartida();
-}
+    if (indice < 0 || indice >= preguntas.length) return; 
+  
+    if (respuestasSeleccionadas[indice] === opcion) {
+      respuestasSeleccionadas[indice] = null; // desmarcar
+    } else {
+      respuestasSeleccionadas[indice] = opcion; // nueva opción
+    }
+  
+    estatDeLaPartida.preguntes[indice].feta = respuestasSeleccionadas[indice] !== null;
+  
+    mostrarPregunta(indice);
+    actualizarEstadoPartida();
+  }
+  
 
 document.getElementById("siguientePregunta").addEventListener("click", function () {
   if (indiceActual < preguntas.length - 1) {
@@ -104,9 +114,13 @@ function actualizarEstadoPartida() {
   let estadoHTML = `<div class="estado-partida">`;
 
   estatDeLaPartida.preguntes.forEach((pregunta, index) => {
-    let color = pregunta.feta ? (respuestasSeleccionadas[index] !== null ? 'green' : 'grey') : 'grey';
+    let color = 'grey'; 
+    if (pregunta.feta && respuestasSeleccionadas[index] !== null) {
+        color = 'green'; 
+    }
     estadoHTML += `<button class="estado-boton" style="background-color: ${color};">${index + 1}</button>`;
-  });
+});
+
 
   estadoHTML += '</div>';
   divEstadoPartida.innerHTML = estadoHTML;
@@ -122,25 +136,14 @@ function finalizarQuiz() {
     .then(data => {
       divPartida.innerHTML = '';
       divEstadoPartida.innerHTML = '';
-
-    // Mostrar solo el resultado final
     let resultadoHTML = `<h3>Resultados</h3>`;
-    
-    // Mostrar total de correctas
     resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-    
-    // Botón para reiniciar el test, centrado
     resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-    
     divResultado.innerHTML = resultadoHTML;
-
     document.querySelector(".navegacion").style.display = "none";
-    
-    // Añadir el evento para reiniciar el test
     document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
   })
   .catch(error => console.error('Error al finalizar el quiz:', error));
-      
     }
 
 function reiniciarQuiz() {
@@ -149,5 +152,4 @@ function reiniciarQuiz() {
   document.querySelector(".navegacion").style.display = "flex"; 
 }
 
-// Cargamos 10 preguntas al inicio
 obtenerPreguntas(10);
