@@ -2,6 +2,7 @@ let preguntas = [];
 let respuestasSeleccionadas = [];
 let indiceActual = 0;
 
+let divInicio = document.getElementById("inicio");
 let divPartida = document.getElementById("partida");
 let divResultado = document.getElementById("resultado");
 let divEstadoPartida = document.getElementById("estadoPartida");
@@ -11,20 +12,61 @@ let estatDeLaPartida = {
   preguntes: []
 };
 
+function mostrarFormulariInici() {
+  let nomUsuari = localStorage.getItem("nomUsuari");
+  let nombrePreguntes = localStorage.getItem("nombrePreguntes");
+
+  if (!nomUsuari) {
+    divInici.innerHTML = `
+      <h2>Bienvenido al Test de Conducció!</h2>
+      <label for="nom">Nom:</label>
+      <input type="text" id="nom" placeholder="Introdueix el teu nom" required>
+      <label for="cantidad">Nombre de preguntes:</label>
+      <input type="number" id="cantidad" value="10" min="1" required>
+      <button id="començar">Començar</button>
+      <button id="esborrarNom">Esborrar Nom</button>
+    `;
+
+    document.getElementById("començar").addEventListener("click", iniciarPartida);
+    document.getElementById("esborrarNom").addEventListener("click", esborrarNom);
+  } else {
+    // Si el nom ja està emmagatzemat, iniciar la partida automàticament
+    iniciarPartida(nombrePreguntes);
+  }
+}
+
+function iniciarPartida() {
+  let nom = document.getElementById("nom").value;
+  let cantidad = parseInt(document.getElementById("cantidad").value);
+
+  if (nom) {
+    localStorage.setItem("nomUsuari", nom);
+  }
+  if (cantidad > 0) {
+    localStorage.setItem("nombrePreguntes", cantidad);
+    obtenerPreguntas(cantidad);
+  }
+  divInici.style.display = "none";
+  divPartida.style.display = "block";
+  divEstadoPartida.style.display = "block";
+  document.querySelector(".navegacion").style.display = "flex";
+}
+
+function esborrarNom() {
+  localStorage.removeItem("nomUsuari");
+  localStorage.removeItem("nombrePreguntes");
+  mostrarFormulariInici(); // Tornar a mostrar el formulari
+}
+
+
 function obtenerPreguntas(cantidad) {
   preguntas = [];
   respuestasSeleccionadas = [];
   indiceActual = 0;
 
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
-    .then(response => {
-      console.log('Respuesta del servidor:', response);
-      return response.text(); // cambio a text() para ver qué está devolviendo el servidor
-    })
-    .then(text => {
-      console.log('Texto recibido:', text); // Imprimir el texto para ver si es válido
-      return JSON.parse(text); // Intenta convertirlo a JSON
-    })
+    .then(response => response.text())
+    .then(text => JSON.parse(text))
     .then(data => {
       preguntas = data;
       estatDeLaPartida.preguntes = preguntas.map(pregunta => ({
