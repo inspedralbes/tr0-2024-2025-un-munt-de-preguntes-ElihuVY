@@ -33,7 +33,7 @@ h1 {
 }
 
 .imagen-pregunta {
-    max-width: 100%; /* La imagen ocupa como máximo el 100% del contenedor */
+    max-width: 70%; /* La imagen ocupa como máximo el 100% del contenedor */
     height: auto;
     width: 400px; /* Tamaño fijo de la imagen para evitar cambios de tamaño drásticos */
     border-radius: 8px;
@@ -150,3 +150,103 @@ h1 {
     justify-content: center;
     font-size: 40px;
   }
+  /* Estilos generales */
+body {
+    background-color: #2C3E50; /* Fondo oscuro */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #ECF0F1; /* Texto claro */
+    height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+    box-sizing: border-box;
+}
+
+#user-form {
+    background-color: #34495E; /* Fondo del formulario */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#user-form h2 {
+    color: #F39C12; /* Color del título */
+}
+
+#user-form input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 80%; /* Ancho del input */
+    max-width: 300px; /* Ancho máximo */
+    border: none;
+    border-radius: 5px;
+}
+
+#user-form button {
+    background-color: #3498DB; /* Color de fondo de los botones */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#user-form button:hover {
+    background-color: #2980B9; /* Color de fondo al pasar el ratón */
+}
+
+/* Estilos del temporizador */
+#timer {
+    font-size: 24px;
+    color: #F39C12; /* Color llamativo */
+    text-align: center;
+    margin: 20px 0; /* Espacio superior e inferior */
+}
+
+/* Preguntas y respuestas */
+.pregunta {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estado de la partida */
+.estado-partida {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    margin-top: 20px;
+}
+
+.navegacion {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.boton-nav {
+    background-color: #3498DB;
+    border: none;
+    padding: 10px 20px;
+    color: #ECF0F1;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.boton-nav:hover {
+    background-color: #2980B9;
+}
+
+/* Resultado */
+#resultado {
+    text-align: center;
+}
