@@ -113,6 +113,7 @@ function actualizarEstadoPartida() {
 }
 
 function finalizarQuiz() {
+    console.log(respuestasSeleccionadas);
   fetch('../back/finalitza.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
