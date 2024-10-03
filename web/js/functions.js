@@ -58,6 +58,8 @@ function iniciarPartida() {
     localStorage.setItem("nombrePreguntes", cantidad);
     obtenerPreguntas(cantidad);
   }
+  
+  // Ocultar el formulario y mostrar la partida
   divInicio.style.display = "none";
   divPartida.style.display = "block";
   divEstadoPartida.style.display = "block";
@@ -212,4 +214,4 @@ function reiniciarQuiz() {
 }
 
 // Cargamos el formulario de inicio al cargar la página
-mostrarFormulariInici();
+document.addEventListener("DOMContentLoaded", mostrarFormulariInici);
