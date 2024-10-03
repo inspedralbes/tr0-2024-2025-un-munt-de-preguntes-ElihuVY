@@ -15,7 +15,7 @@ let estatDeLaPartida = {
 // Mostrar el formulario de inicio
 function mostrarFormulariInici() {
   let nomUsuari = localStorage.getItem("nomUsuari");
-  let nPreguntas = localStorage.getItem("nPreguntas");
+  let nPreguntas = localStorage.getItem("nombrePreguntes");
 
   if (!nomUsuari) {
     divInicio.innerHTML = `
@@ -45,7 +45,6 @@ function mostrarFormulariInici() {
     iniciarPartida(nPreguntas);
   }
 }
-
 
 // Iniciar la partida
 function iniciarPartida() {
@@ -204,9 +203,12 @@ function finalizarQuiz() {
 
 // Reiniciar el quiz
 function reiniciarQuiz() {
+  respuestasSeleccionadas = [];
+  indiceActual = 0; // Reiniciar el índice actual
   divResultado.innerHTML = ''; 
-  obtenerPreguntas(10); 
-  document.querySelector(".navegacion").style.display = "flex"; 
+  divPartida.style.display = "none"; // Ocultar la partida
+  divEstadoPartida.style.display = "none"; // Ocultar el estado de la partida
+  mostrarFormulariInici(); // Mostrar el formulario de inicio
 }
 
 // Cargamos el formulario de inicio al cargar la página
