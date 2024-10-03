@@ -140,14 +140,6 @@ function finalizarQuiz() {
     document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
   })
   .catch(error => console.error('Error al finalizar el quiz:', error));
-      let resultadoHTML = `<h3>Resultados</h3>`;
-      resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-      resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-
-      divResultado.innerHTML = resultadoHTML;
-      document.querySelector(".navegacion").style.display = "none";
-
-      document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
     }
 
 function reiniciarQuiz() {
