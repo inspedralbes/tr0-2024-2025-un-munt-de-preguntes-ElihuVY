@@ -1,195 +1,69 @@
 let preguntas = [];
 let respuestasSeleccionadas = [];
 let indiceActual = 0;
+let tiempo; // Variable para almacenar el temporizador
+let tiempoLimite = 30; // Limite de tiempo en segundos
+let interval; // Intervalo del temporizador
 
 let divPartida = document.getElementById("partida");
 let divResultado = document.getElementById("resultado");
 let divEstadoPartida = document.getElementById("estadoPartida");
+let divTimer = document.getElementById("timer");
 let divUserForm = document.getElementById("user-form");
-let divNavegacion = document.querySelector(".navegacion");
-let timerElement = document.getElementById("timer");
-let timeRemaining = 30; // Tiempo total de la partida
-let timer;
 
 let estatDeLaPartida = {
-    contadorPreguntes: 0,
-    preguntes: []
+  contadorPreguntes: 0,
+  preguntes: []
 };
 
-// Cargar el nombre del usuario desde localStorage
-const savedUsername = localStorage.getItem("username");
-if (savedUsername) {
-    document.getElementById("username").value = savedUsername;
-    divUserForm.style.display = 'none'; // Ocultar formulario
-    startGame(10); // Iniciar el juego automáticamente con 10 preguntas
-}
-
-// Función para iniciar el juego
-document.getElementById("startGame").addEventListener("click", function () {
+document.getElementById("startGame").addEventListener("click", function() {
     const username = document.getElementById("username").value.trim();
-    const questionCount = parseInt(document.getElementById("questionCount").value, 10);
+    const questionCount = document.getElementById("questionCount").value;
 
-    if (username === "" || isNaN(questionCount) || questionCount <= 0) {
-        alert("Introdueix un nom vàlid i un nombre de preguntes!");
+    if (username === "") {
+        alert("Si us plau, introdueix el teu nom.");
         return;
     }
 
-    // Guardar el nombre de usuario en localStorage
+    // Guardar el nom en localStorage
     localStorage.setItem("username", username);
-    divUserForm.style.display = 'none'; // Ocultar formulario
-    divNavegacion.style.display = 'flex'; // Mostrar botones de navegación
-    timerElement.style.display = 'block'; // Mostrar el temporizador
-    startGame(questionCount);
+    divUserForm.style.display = "none"; // Ocultar el formulari
+    divTimer.style.display = "block"; // Mostrar el temporizador
+
+    obtenerPreguntas(questionCount); // Cargar preguntas
+    iniciarTemporizador(); // Iniciar el temporizador
 });
 
-document.getElementById("clearName").addEventListener("click", function () {
+document.getElementById("clearName").addEventListener("click", function() {
     localStorage.removeItem("username");
-    document.getElementById("username").value = "";
+    document.getElementById("username").value = '';
+    alert("Nom esborrat. Introdueix un nou nom per començar el test.");
 });
 
-// Función para iniciar el juego
-function startGame(questionCount) {
-    obtenerPreguntas(questionCount);
-    startTimer();
-}
+function iniciarTemporizador() {
+    tiempo = tiempoLimite; // Reiniciar el tiempo
+    document.getElementById("time").textContent = tiempo; // Mostrar tiempo inicial
 
-function startTimer() {
-    timer = setInterval(() => {
-        timeRemaining--;
-        document.getElementById("time").textContent = timeRemaining;
+    interval = setInterval(function() {
+        tiempo--;
+        document.getElementById("time").textContent = tiempo;
 
-        if (timeRemaining <= 0) {
-            clearInterval(timer);
-            finalizarQuiz(); // Finalizar el quiz si se acaba el tiempo
+        if (tiempo <= 0) {
+            clearInterval(interval); // Detener el temporizador
+            finalizarQuiz(); // Finalizar el test
         }
     }, 1000);
 }
 
-function obtenerPreguntas(cantidad) {
+function reiniciarQuiz() {
+    clearInterval(interval); // Limpiar el temporizador
+    divResultado.innerHTML = '';
+    divUserForm.style.display = "block"; // Mostrar el formulario nuevamente
+    divTimer.style.display = "none"; // Ocultar el temporizador
     preguntas = [];
     respuestasSeleccionadas = [];
     indiceActual = 0;
-
-    fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
-        .then(response => response.json())
-        .then(data => {
-            preguntas = data;
-            estatDeLaPartida.preguntes = preguntas.map(pregunta => ({
-                id: pregunta.id,
-                feta: false,
-                resposta: null
-            }));
-            mostrarPregunta(indiceActual);
-            actualizarEstadoPartida();
-        })
-        .catch(error => console.error('Error al obtener preguntas:', error));
 }
 
-function mostrarPregunta(indice) {
-    if (indice < 0 || indice >= preguntas.length) return;
-
-    let pregunta = preguntas[indice].pregunta;
-    let respostes = preguntas[indice].respostes;
-    let contenidoHTML = `
-        <div class="pregunta">${pregunta}</div>
-        <div class="imagen-container">
-            <img src="img/${preguntas[indice].imatge}" alt="Imagen de la pregunta" class="imagen-pregunta">
-        </div>
-        <div class="respuestas-container">
-    `;
-
-    respostes.forEach((respuesta, i) => {
-        let fondoColor = respuestasSeleccionadas[indice] == i ? 'background-color: green;' : '';
-        contenidoHTML += `
-            <button class="respuesta" data-indice="${indice}" data-opcion="${i}" style="${fondoColor}">
-                ${respuesta}
-            </button>
-        `;
-    });
-
-    contenidoHTML += `</div>`;
-    divPartida.innerHTML = contenidoHTML;
-    actualizarEstadoPartida();
-}
-
-divPartida.addEventListener("click", function (event) {
-    if (event.target.classList.contains("respuesta")) {
-        let indice = parseInt(event.target.getAttribute("data-indice"));
-        let opcion = parseInt(event.target.getAttribute("data-opcion"));
-        seleccionarRespuesta(indice, opcion);
-    }
-});
-
-function seleccionarRespuesta(indice, opcion) {
-    if (indice < 0 || indice >= preguntas.length) return; // Evitar índices inválidos
-
-    respuestasSeleccionadas[indice] = respuestasSeleccionadas[indice] === opcion ? null : opcion;
-    estatDeLaPartida.preguntes[indice].feta = respuestasSeleccionadas[indice] !== null;
-
-    mostrarPregunta(indice);
-    actualizarEstadoPartida();
-}
-
-document.getElementById("siguientePregunta").addEventListener("click", function () {
-    if (indiceActual < preguntas.length - 1) {
-        indiceActual++;
-        mostrarPregunta(indiceActual);
-    } else {
-        finalizarQuiz();
-    }
-});
-
-document.getElementById("anteriorPregunta").addEventListener("click", function () {
-    if (indiceActual > 0) {
-        indiceActual--;
-        mostrarPregunta(indiceActual);
-    }
-});
-
-function actualizarEstadoPartida() {
-    let estadoHTML = `<div class="estado-partida">`;
-
-    estatDeLaPartida.preguntes.forEach((pregunta, index) => {
-        let color = pregunta.feta ? (respuestasSeleccionadas[index] !== null ? 'green' : 'grey') : 'grey';
-        estadoHTML += `<button class="estado-boton" style="background-color: ${color};">${index + 1}</button>`;
-    });
-
-    estadoHTML += '</div>';
-    divEstadoPartida.innerHTML = estadoHTML;
-}
-
-function finalizarQuiz() {
-    clearInterval(timer); // Detener el temporizador
-    fetch('../back/finalitza.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ respuestas: respuestasSeleccionadas })
-    })
-    .then(response => response.json())
-    .then(data => {
-        divPartida.innerHTML = '';
-        divEstadoPartida.innerHTML = '';
-        timerElement.style.display = 'none'; // Ocultar el temporizador
-        
-        let resultadoHTML = `<h3>Resultados</h3>`;
-        resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-        resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-        
-        divResultado.innerHTML = resultadoHTML;
-        divNavegacion.style.display = "none"; // Ocultar botones de navegación
-
-        document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-    })
-    .catch(error => console.error('Error al finalizar el quiz:', error));
-}
-
-function reiniciarQuiz() {
-    divResultado.innerHTML = ''; 
-    obtenerPreguntas(10); 
-    document.querySelector(".navegacion").style.display = "flex"; 
-}
-
-// Cargamos 10 preguntas al inicio si el usuario no está guardado en localStorage
-if (!savedUsername) {
-    divUserForm.style.display = 'flex'; // Mostrar formulario si no hay nombre guardado
-}
+// Cargamos 10 preguntas al inicio
+obtenerPreguntas(30);

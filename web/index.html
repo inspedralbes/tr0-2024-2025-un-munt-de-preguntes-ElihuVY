@@ -10,8 +10,9 @@
     <h1>TEST DE CONDUCIR</h1>
 
     <div id="user-form">
-        <input type="text" id="username" placeholder="Introdueix el teu nom" />
-        <input type="number" id="questionCount" placeholder="Nombre de preguntes" />
+        <h2>Iniciar Test</h2>
+        <input type="text" id="username" placeholder="Introdueix el teu nom" required />
+        <input type="number" id="questionCount" placeholder="Nombre de preguntes (30)" min="30" max="30" value="30" required />
         <button id="startGame">Començar Test</button>
         <button id="clearName">Esborrar Nom</button>
     </div>
