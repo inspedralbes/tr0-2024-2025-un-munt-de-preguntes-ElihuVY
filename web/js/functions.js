@@ -12,13 +12,14 @@ let estatDeLaPartida = {
   preguntes: []
 };
 
+// Mostrar el formulario de inicio
 function mostrarFormulariInici() {
   let nomUsuari = localStorage.getItem("nomUsuari");
   let nombrePreguntes = localStorage.getItem("nombrePreguntes");
 
   if (!nomUsuari) {
-    divInici.innerHTML = `
-      <h2>Bienvenido al Test de Conducció!</h2>
+    divInicio.innerHTML = `
+      <h2>Benvingut al Test de Conducció!</h2>
       <label for="nom">Nom:</label>
       <input type="text" id="nom" placeholder="Introdueix el teu nom" required>
       <label for="cantidad">Nombre de preguntes:</label>
@@ -30,11 +31,12 @@ function mostrarFormulariInici() {
     document.getElementById("començar").addEventListener("click", iniciarPartida);
     document.getElementById("esborrarNom").addEventListener("click", esborrarNom);
   } else {
-    // Si el nom ja està emmagatzemat, iniciar la partida automàticament
+    // Si el nombre ya está almacenado, iniciar la partida automáticamente
     iniciarPartida(nombrePreguntes);
   }
 }
 
+// Iniciar la partida
 function iniciarPartida() {
   let nom = document.getElementById("nom").value;
   let cantidad = parseInt(document.getElementById("cantidad").value);
@@ -46,19 +48,20 @@ function iniciarPartida() {
     localStorage.setItem("nombrePreguntes", cantidad);
     obtenerPreguntas(cantidad);
   }
-  divInici.style.display = "none";
+  divInicio.style.display = "none";
   divPartida.style.display = "block";
   divEstadoPartida.style.display = "block";
   document.querySelector(".navegacion").style.display = "flex";
 }
 
+// Función para borrar el nombre
 function esborrarNom() {
   localStorage.removeItem("nomUsuari");
   localStorage.removeItem("nombrePreguntes");
-  mostrarFormulariInici(); // Tornar a mostrar el formulari
+  mostrarFormulariInici(); // Volver a mostrar el formulario
 }
 
-
+// Obtener preguntas desde el servidor
 function obtenerPreguntas(cantidad) {
   preguntas = [];
   respuestasSeleccionadas = [];
@@ -80,7 +83,7 @@ function obtenerPreguntas(cantidad) {
     .catch(error => console.error('Error al obtener preguntas:', error));
 }
 
-
+// Mostrar la pregunta actual
 function mostrarPregunta(indice) {
   if (indice < 0 || indice >= preguntas.length) return;
 
@@ -116,6 +119,7 @@ divPartida.addEventListener("click", function (event) {
   }
 });
 
+// Seleccionar respuesta
 function seleccionarRespuesta(indice, opcion) {
   if (indice < 0 || indice >= preguntas.length) return; // Evitar índices inválidos
 
@@ -126,6 +130,7 @@ function seleccionarRespuesta(indice, opcion) {
   actualizarEstadoPartida();
 }
 
+// Navegar entre preguntas
 document.getElementById("siguientePregunta").addEventListener("click", function () {
   if (indiceActual < preguntas.length - 1) {
     indiceActual++;
@@ -142,6 +147,7 @@ document.getElementById("anteriorPregunta").addEventListener("click", function (
   }
 });
 
+// Actualizar estado de la partida
 function actualizarEstadoPartida() {
   let estadoHTML = `<div class="estado-partida">`;
 
@@ -154,6 +160,7 @@ function actualizarEstadoPartida() {
   divEstadoPartida.innerHTML = estadoHTML;
 }
 
+// Finalizar el quiz
 function finalizarQuiz() {
   fetch('../back/finalitza.php', {
     method: 'POST',
@@ -165,38 +172,31 @@ function finalizarQuiz() {
       divPartida.innerHTML = '';
       divEstadoPartida.innerHTML = '';
 
-    // Mostrar solo el resultado final
-    let resultadoHTML = `<h3>Resultados</h3>`;
-    
-    // Mostrar total de correctas
-    resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-    
-    // Botón para reiniciar el test, centrado
-    resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-    
-    divResultado.innerHTML = resultadoHTML;
-
-    document.querySelector(".navegacion").style.display = "none";
-    
-    // Añadir el evento para reiniciar el test
-    document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-  })
-  .catch(error => console.error('Error al finalizar el quiz:', error));
+      // Mostrar solo el resultado final
       let resultadoHTML = `<h3>Resultados</h3>`;
+      
+      // Mostrar total de correctas
       resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
+      
+      // Botón para reiniciar el test, centrado
       resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-
+      
       divResultado.innerHTML = resultadoHTML;
+
       document.querySelector(".navegacion").style.display = "none";
-
+      
+      // Añadir el evento para reiniciar el test
       document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-    }
+    })
+    .catch(error => console.error('Error al finalizar el quiz:', error));
+}
 
+// Reiniciar el quiz
 function reiniciarQuiz() {
   divResultado.innerHTML = ''; 
   obtenerPreguntas(10); 
   document.querySelector(".navegacion").style.display = "flex"; 
 }
 
-// Cargamos 10 preguntas al inicio
-obtenerPreguntas(10);
+// Cargamos el formulario de inicio al cargar la página
+mostrarFormulariInici();
