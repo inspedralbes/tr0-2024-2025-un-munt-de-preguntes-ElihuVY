@@ -1,3 +1,4 @@
+/* General styles */
 body {
     background-color: #2C3E50; /* Fondo oscuro */
     display: flex;
@@ -19,18 +20,32 @@ h1 {
     text-align: center;
 }
 
-
-#inicio, #partida, #resultado {
-    width: 80%;
-    max-width: 600px;
-    background-color: #34495E; /* Contenedor más claro */
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+/* Estilo para el contenedor del formulario */
+#inicio {
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    max-width: 400px; /* Ancho máximo del formulario */
+    margin: 20px auto; /* Centrando el contenedor */
 }
 
-h2{
+/* Estilo para las etiquetas del formulario */
+label {
+    display: block; /* Cada etiqueta ocupa su propia línea */
+    margin-bottom: 8px; /* Espaciado inferior */
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilo para los campos de entrada */
+input[type="text"],
+input[type="number"] {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    margin-bottom: 15px; /* Espaciado inferior */
+}h2{
     font-size: 24;
     margin-bottom: 30px;
     color: #e6ae55;
@@ -51,7 +66,7 @@ h2{
 }
 
 .imagen-pregunta {
-    max-width: 100%; /* La imagen ocupa como máximo el 100% del contenedor */
+    max-width: 70%; /* La imagen ocupa como máximo el 100% del contenedor */
     height: auto;
     width: 400px; /* Tamaño fijo de la imagen para evitar cambios de tamaño drásticos */
     border-radius: 8px;
