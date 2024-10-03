@@ -2,47 +2,37 @@
 session_start();
 header('Content-Type: application/json');
 
-require 'db.php'; 
+include 'db.php'; 
 
-if (isset($_GET['cantidad'])) {
-    $cantidad = $_GET['cantidad'];
-} else {
-    $cantidad = 10; 
-}
+$cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : 10; 
 
-$sql = "SELECT * FROM preguntas";
+$sql = "SELECT * FROM preguntas ORDER BY RAND() LIMIT $cantidad";
 $result = $conn->query($sql);
 
-$preguntas_array = [];
+$preguntas_array = []; 
+$respuestas_correctas = [];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $preguntas_array= [
-            'id' => $row['id'],
-            'pregunta' => $row['pregunta'],
-            'respostes' => [
-                $row['respuesta_0'],
-                $row['respuesta_1'],
-                $row['respuesta_2']
-            ],
-            'resposta_correcta' => $row['respuesta_correcta'],
-            'imatge' => $row['imatge']
-        ];
+        $pregunta_obj = new stdClass();
+        $pregunta_obj->id = $row['id'];
+        $pregunta_obj->pregunta = $row['pregunta'];
+        $respostes = [];
+        for ($i = 0; $i <=2; $i++) {
+            $respostes[] = $row['respuesta_' . $i];
+        }
+        $pregunta_obj->respostes;
+        $pregunta_obj->imatge = $row['imatge'];
+
+        $respuestas_correctas[] = $row['respuesta_correcta'];
+
+        array_push($preguntas_array, $pregunta_obj);
     }
-}
-
-shuffle($preguntas_array); 
-
-$preguntas_seleccionadas = array_slice($preguntas_array, 0, $cantidad);
-
-$respuestas_correctas = [];
-
-foreach ($preguntas_seleccionadas as &$pregunta) {
-    $respuestas_correctas[] = $pregunta['resposta_correcta']; 
-    unset($pregunta['resposta_correcta']); 
 }
 
 $_SESSION['respuestas_correctas'] = $respuestas_correctas;
 
-echo json_encode($preguntas_seleccionadas);
+echo json_encode($preguntas_array);
+
+$conn->close(); 
 ?>
