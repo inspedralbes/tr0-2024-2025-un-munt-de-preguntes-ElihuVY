@@ -123,24 +123,19 @@ function finalizarQuiz() {
       divPartida.innerHTML = '';
       divEstadoPartida.innerHTML = '';
 
-    // Mostrar solo el resultado final
     let resultadoHTML = `<h3>Resultados</h3>`;
     
-    // Mostrar total de correctas
     resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
     
-    // Botón para reiniciar el test, centrado
     resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
     
     divResultado.innerHTML = resultadoHTML;
 
     document.querySelector(".navegacion").style.display = "none";
     
-    // Añadir el evento para reiniciar el test
     document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
   })
   .catch(error => console.error('Error al finalizar el quiz:', error));
-      
     }
 
 function reiniciarQuiz() {

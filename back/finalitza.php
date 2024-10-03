@@ -17,14 +17,10 @@ $respuestas_correctas_usuario = 0;
 $total_respuestas = count($respuestas_usuario);
 
 foreach ($respuestas_usuario as $pregunta_id => $respuesta_usuario) {
-    // Verifica los valores antes de la comparación
-    echo "Pregunta ID: $pregunta_id, Respuesta Usuario: $respuesta_usuario, Respuesta Correcta: " . (isset($respuestas_correctas[$pregunta_id]) ? $respuestas_correctas[$pregunta_id] : "No existe") . "<br>";
-    
     if (isset($respuestas_correctas[$pregunta_id]) && $respuesta_usuario == $respuestas_correctas[$pregunta_id]) {
         $respuestas_correctas_usuario++;
     }
 }
-
 
 echo json_encode([
     'total' => $total_respuestas,
