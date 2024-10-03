@@ -4,10 +4,15 @@ let indiceActual = 0;
 let tiempo; // Variable para almacenar el temporizador
 let tiempoLimite = 30; // Limite de tiempo en segundos
 let interval; // Intervalo del temporizador
+let tiempo; // Variable para almacenar el temporizador
+let tiempoLimite = 30; // Limite de tiempo en segundos
+let interval; // Intervalo del temporizador
 
 let divPartida = document.getElementById("partida");
 let divResultado = document.getElementById("resultado");
 let divEstadoPartida = document.getElementById("estadoPartida");
+let divTimer = document.getElementById("timer");
+let divUserForm = document.getElementById("user-form");
 let divTimer = document.getElementById("timer");
 let divUserForm = document.getElementById("user-form");
 
