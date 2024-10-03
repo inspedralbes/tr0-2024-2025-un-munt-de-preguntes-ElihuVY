@@ -12,7 +12,7 @@ if (!isset($respuestas_usuario['respuestas']) || !is_array($respuestas_usuario['
     exit;
 }
 
-$respuestas_usuario = $respuestas_usuario['respuestas'];
+$respuestas_usuario[] = $respuestas_usuario['respuestas'];
 $respuestas_correctas_usuario = 0;
 $total_respuestas = count($respuestas_usuario);
 
