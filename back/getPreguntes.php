@@ -21,7 +21,7 @@ if ($result->num_rows > 0) {
         for ($i = 0; $i <=2; $i++) {
             $respostes[] = $row['respuesta_' . $i];
         }
-        $pregunta_obj->respostes;
+        $pregunta_obj->respostes = $respostes;
         $pregunta_obj->imatge = $row['imatge'];
 
         $respuestas_correctas[] = $row['respuesta_correcta'];
