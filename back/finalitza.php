@@ -17,7 +17,7 @@ $respuestas_correctas_usuario = 0;
 $total_respuestas = count($respuestas_usuario);
 
 foreach ($respuestas_usuario as $pregunta_id => $respuesta_usuario) {
-    if (isset($respuestas_correctas[$pregunta_id]) && $respuesta_usuario == $respuestas_correctas[$pregunta_id]) {
+    if ($respuesta_usuario == $respuestas_correctas[$pregunta_id]) {
         $respuestas_correctas_usuario++;
     }
 }
