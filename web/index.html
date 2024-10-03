@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST CONDUCIR</title>
+    <title>TEST DE CONDUCIR</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>TEST DE CONDUCIR</h1>
+    <div id="user-form">
+        <h1>TEST DE CONDUCIR</h1>
+        <h2>Iniciar Test</h2>
+        <input type="text" id="username" placeholder="Introdueix el teu nom" required />
+        <input type="number" id="questionCount" placeholder="Nombre de preguntes (5-30)" min="6" max="30" value="10" required />
+        <button id="startGame">Començar Test</button>
+        <button id="clearName">Esborrar Nom</button>
+    </div>
 
-    <div id="partida"></div> 
-    <div id="estadoPartida"></div>    
+    <div id="timer" style="display: none;">
+        <p>Temps restant: <span id="time">30</span> segons</p>
+    </div>
 
-    <div class="navegacion">
+    <div id="partida" style="display: none;"></div> 
+    <div id="estadoPartida" style="display: none;"></div>    
+
+    <div class="navegacion" style="display: none;">
         <button id="anteriorPregunta" class="boton-nav">Anterior</button>
         <button id="siguientePregunta" class="boton-nav">Siguiente</button>
     </div>
 
-    <div id="resultado"></div> 
+    <div id="resultado" style="display: none;"></div> 
     
     <script src="js/functions.js"></script>
 </body>
