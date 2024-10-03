@@ -33,7 +33,7 @@ h1 {
 }
 
 .imagen-pregunta {
-    max-width: 100%; /* La imagen ocupa como máximo el 100% del contenedor */
+    max-width: 70%; /* La imagen ocupa como máximo el 100% del contenedor */
     height: auto;
     width: 400px; /* Tamaño fijo de la imagen para evitar cambios de tamaño drásticos */
     border-radius: 8px;
