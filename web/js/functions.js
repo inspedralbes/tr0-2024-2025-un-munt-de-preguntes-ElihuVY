@@ -18,9 +18,8 @@ function obtenerPreguntas(cantidad) {
 
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
     .then(response => {
-      // Imprimir la respuesta para depuración
       console.log('Respuesta del servidor:', response);
-      return response.text(); // Cambiar a text() para ver qué está devolviendo el servidor
+      return response.text(); // cambio a text() para ver qué está devolviendo el servidor
     })
     .then(text => {
       console.log('Texto recibido:', text); // Imprimir el texto para ver si es válido
@@ -41,7 +40,7 @@ function obtenerPreguntas(cantidad) {
 
 
 function mostrarPregunta(indice) {
-  if (indice < 0 || indice >= preguntas.length) return; // Limitar rangos
+  if (indice < 0 || indice >= preguntas.length) return;
 
   let pregunta = preguntas[indice].pregunta;
   let respostes = preguntas[indice].respostes;
