@@ -113,42 +113,37 @@ function actualizarEstadoPartida() {
 }
 
 function finalizarQuiz() {
-  fetch('../back/finalitza.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ respuestas: respuestasSeleccionadas })
-  })
+    console.log('Respuestas a enviar:', respuestasSeleccionadas); // Log para ver las respuestas
+    fetch('../back/finalitza.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ respuestas: respuestasSeleccionadas })
+    })
     .then(response => response.json())
     .then(data => {
       divPartida.innerHTML = '';
       divEstadoPartida.innerHTML = '';
-
-    // Mostrar solo el resultado final
-    let resultadoHTML = `<h3>Resultados</h3>`;
-    
-    // Mostrar total de correctas
-    resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-    
-    // Botón para reiniciar el test, centrado
-    resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-    
-    divResultado.innerHTML = resultadoHTML;
-
-    document.querySelector(".navegacion").style.display = "none";
-    
-    // Añadir el evento para reiniciar el test
-    document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-  })
-  .catch(error => console.error('Error al finalizar el quiz:', error));
+  
+      // Mostrar solo el resultado final
       let resultadoHTML = `<h3>Resultados</h3>`;
+      
+      // Mostrar total de correctas
       resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
+      
+      // Botón para reiniciar el test, centrado
       resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-
+      
       divResultado.innerHTML = resultadoHTML;
+      divResultado.style.display = 'block'; // Asegúrate de que el div se muestre
+  
       document.querySelector(".navegacion").style.display = "none";
-
+      
+      // Añadir el evento para reiniciar el test
       document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-    }
+    })
+    .catch(error => console.error('Error al finalizar el quiz:', error));
+  }
+  
 
 function reiniciarQuiz() {
   divResultado.innerHTML = ''; 
