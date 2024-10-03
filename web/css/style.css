@@ -20,6 +20,38 @@ h1 {
     text-align: center;
 }
 
+/* Estilo para el contenedor del formulario */
+#inicio {
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    max-width: 400px; /* Ancho máximo del formulario */
+    margin: 20px auto; /* Centrando el contenedor */
+}
+
+/* Estilo para las etiquetas del formulario */
+label {
+    display: block; /* Cada etiqueta ocupa su propia línea */
+    margin-bottom: 8px; /* Espaciado inferior */
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilo para los campos de entrada */
+input[type="text"],
+input[type="number"] {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    margin-bottom: 15px; /* Espaciado inferior */
+}h2{
+    font-size: 24;
+    margin-bottom: 30px;
+    color: #e6ae55;
+    text-align: center;
+}
+
 /* Preguntas y respuestas */
 .pregunta {
     font-size: 24px;

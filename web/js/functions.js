@@ -15,7 +15,7 @@ let estatDeLaPartida = {
 // Mostrar el formulario de inicio
 function mostrarFormulariInici() {
   let nomUsuari = localStorage.getItem("nomUsuari");
-  let nombrePreguntes = localStorage.getItem("nombrePreguntes");
+  let nPreguntas = localStorage.getItem("nPreguntas");
 
   if (!nomUsuari) {
     divInicio.innerHTML = `
@@ -23,18 +23,29 @@ function mostrarFormulariInici() {
       <label for="nom">Nom:</label>
       <input type="text" id="nom" placeholder="Introdueix el teu nom" required>
       <label for="cantidad">Nombre de preguntes:</label>
-      <input type="number" id="cantidad" value="10" min="1" required>
+      <input type="number" id="cantidad" value="10" min="1" max="30" required>
       <button id="començar">Començar</button>
       <button id="esborrarNom">Esborrar Nom</button>
     `;
+
+    // Evento para restringir la entrada a un máximo de 30
+    document.getElementById("cantidad").addEventListener("input", function() {
+      const cantidadInput = parseInt(this.value);
+      if (cantidadInput > 30) {
+        this.value = 30; // Si se introduce un número mayor a 30, se establece a 30
+      } else if (cantidadInput < 1) {
+        this.value = 1; // Asegúrate de que no sea menor que 1
+      }
+    });
 
     document.getElementById("començar").addEventListener("click", iniciarPartida);
     document.getElementById("esborrarNom").addEventListener("click", esborrarNom);
   } else {
     // Si el nombre ya está almacenado, iniciar la partida automáticamente
-    iniciarPartida(nombrePreguntes);
+    iniciarPartida(nPreguntas);
   }
 }
+
 
 // Iniciar la partida
 function iniciarPartida() {
