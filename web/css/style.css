@@ -66,11 +66,11 @@ input[type="number"] {
 }
 
 .imagen-pregunta {
-    max-width: 70%; /* La imagen ocupa como máximo el 100% del contenedor */
+    max-width: 100%;
     height: auto;
-    width: 400px; /* Tamaño fijo de la imagen para evitar cambios de tamaño drásticos */
+    width: 400px;
     border-radius: 8px;
-    object-fit: contain; /* Se ajusta para que siempre se muestre bien */
+    object-fit: contain;
 }
 
 .respuestas-container {

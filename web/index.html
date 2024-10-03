@@ -8,16 +8,33 @@
 </head>
 <body>
     <h1>TEST DE CONDUCIR</h1>
-    <div id="inicio"></div>
-    <div id="partida" style="display: none;"></div> 
-    <div id="estadoPartida"></div>    
-
-    <div class="navegacion" style="display: none;">
-        <button id="anteriorPregunta" class="boton-nav">Anterior</button>
-        <button id="siguientePregunta" class="boton-nav">Siguiente</button>
+    
+    <!-- Formulario de inicio -->
+    <div id="inicio">
+        <h2>Inicia el Test</h2>
+        <label for="nom">Nombre:</label>
+        <input type="text" id="nom" placeholder="Introduce tu nombre" required>
+        <br>
+        <label for="cantidad">Número de preguntas:</label>
+        <input type="number" id="cantidad" value="5" min="1" max="30" required>
+        <br><br>
+        <button id="comenzar">Comenzar</button>
     </div>
 
-    <div id="resultado"></div> 
+    <!-- Contenedor de la partida -->
+    <div id="partida" style="display: none;">
+        <div id="pregunta"></div>
+        <div id="respuestas"></div>
+        <button id="anterior" style="display: none;">Anterior</button>
+        <button id="siguiente">Siguiente</button>
+    </div>
+
+    <!-- Resultado final -->
+    <div id="resultado" style="display: none;">
+        <h2>Resultados</h2>
+        <p id="resultadoTexto"></p>
+        <button id="reiniciar">Reiniciar</button>
+    </div>
     
     <script src="js/functions.js"></script>
 </body>

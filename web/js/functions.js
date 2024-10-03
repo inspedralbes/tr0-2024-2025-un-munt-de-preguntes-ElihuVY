@@ -1,217 +1,121 @@
 let preguntas = [];
 let respuestasSeleccionadas = [];
 let indiceActual = 0;
+let nombreUsuario = "";
 
+// Elementos del DOM
 let divInicio = document.getElementById("inicio");
 let divPartida = document.getElementById("partida");
 let divResultado = document.getElementById("resultado");
-let divEstadoPartida = document.getElementById("estadoPartida");
+let divPregunta = document.getElementById("pregunta");
+let divRespuestas = document.getElementById("respuestas");
+let btnAnterior = document.getElementById("anterior");
+let btnSiguiente = document.getElementById("siguiente");
+let resultadoTexto = document.getElementById("resultadoTexto");
 
-let estatDeLaPartida = {
-  contadorPreguntes: 0,
-  preguntes: []
-};
+// Comenzar la partida
+document.getElementById("comenzar").addEventListener("click", function() {
+    nombreUsuario = document.getElementById("nom").value;
+    let cantidadPreguntas = parseInt(document.getElementById("cantidad").value);
+    
+    if (nombreUsuario && cantidadPreguntas > 0) {
+        iniciarPartida(cantidadPreguntas);
+    } else {
+        alert("Por favor, introduce un nombre y selecciona un número válido de preguntas.");
+    }
+});
 
-// Mostrar el formulario de inicio
-function mostrarFormulariInici() {
-  let nomUsuari = localStorage.getItem("nomUsuari");
-  let nPreguntas = localStorage.getItem("nombrePreguntes");
+// Función para iniciar la partida
+function iniciarPartida(cantidad) {
+    preguntas = generarPreguntas(cantidad);
+    respuestasSeleccionadas = Array(cantidad).fill(null);
+    indiceActual = 0;
 
-  if (!nomUsuari) {
-    divInicio.innerHTML = `
-      <h2>Benvingut al Test de Conducció!</h2>
-      <label for="nom">Nom:</label>
-      <input type="text" id="nom" placeholder="Introdueix el teu nom" required>
-      <label for="cantidad">Nombre de preguntes:</label>
-      <input type="number" id="cantidad" value="10" min="1" max="30" required>
-      <button id="començar">Començar</button>
-      <button id="esborrarNom">Esborrar Nom</button>
-    `;
+    divInicio.style.display = "none";
+    divPartida.style.display = "block";
+    mostrarPregunta(indiceActual);
+}
 
-    // Evento para restringir la entrada a un máximo de 30
-    document.getElementById("cantidad").addEventListener("input", function() {
-      const cantidadInput = parseInt(this.value);
-      if (cantidadInput > 30) {
-        this.value = 30; // Si se introduce un número mayor a 30, se establece a 30
-      } else if (cantidadInput < 1) {
-        this.value = 1; // Asegúrate de que no sea menor que 1
-      }
+// Función para generar preguntas de ejemplo
+function generarPreguntas(cantidad) {
+    let preguntasEjemplo = [];
+    for (let i = 1; i <= cantidad; i++) {
+        preguntasEjemplo.push({
+            pregunta: `¿Pregunta ${i}?`,
+            respuestas: ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"],
+            correcta: Math.floor(Math.random() * 4)
+        });
+    }
+    return preguntasEjemplo;
+}
+
+// Mostrar pregunta
+function mostrarPregunta(indice) {
+    let pregunta = preguntas[indice];
+    divPregunta.innerText = pregunta.pregunta;
+
+    // Mostrar las respuestas
+    divRespuestas.innerHTML = "";
+    pregunta.respuestas.forEach((respuesta, i) => {
+        let btnRespuesta = document.createElement("button");
+        btnRespuesta.innerText = respuesta;
+        btnRespuesta.addEventListener("click", function() {
+            seleccionarRespuesta(indice, i);
+        });
+
+        // Colorear si está seleccionada
+        if (respuestasSeleccionadas[indice] === i) {
+            btnRespuesta.style.backgroundColor = "lightblue";
+        }
+
+        divRespuestas.appendChild(btnRespuesta);
     });
 
-    document.getElementById("començar").addEventListener("click", iniciarPartida);
-    document.getElementById("esborrarNom").addEventListener("click", esborrarNom);
-  } else {
-    // Si el nombre ya está almacenado, iniciar la partida automáticamente
-    iniciarPartida(nPreguntas);
-  }
+    // Control de botones de navegación
+    btnAnterior.style.display = indice > 0 ? "inline" : "none";
+    btnSiguiente.innerText = indice === preguntas.length - 1 ? "Finalizar" : "Siguiente";
 }
-
-// Iniciar la partida
-function iniciarPartida() {
-  let nom = document.getElementById("nom").value;
-  let cantidad = parseInt(document.getElementById("cantidad").value);
-
-  if (nom) {
-    localStorage.setItem("nomUsuari", nom);
-  }
-  if (cantidad > 0) {
-    localStorage.setItem("nombrePreguntes", cantidad);
-    obtenerPreguntas(cantidad);
-  }
-  
-  // Ocultar el formulario y mostrar la partida
-  divInicio.style.display = "none";
-  divPartida.style.display = "block";
-  divEstadoPartida.style.display = "block";
-  document.querySelector(".navegacion").style.display = "flex";
-}
-
-// Función para borrar el nombre
-function esborrarNom() {
-  localStorage.removeItem("nomUsuari");
-  localStorage.removeItem("nombrePreguntes");
-  mostrarFormulariInici(); // Volver a mostrar el formulario
-}
-
-// Obtener preguntas desde el servidor
-function obtenerPreguntas(cantidad) {
-  preguntas = [];
-  respuestasSeleccionadas = [];
-  indiceActual = 0;
-
-  fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
-    .then(response => response.text())
-    .then(text => JSON.parse(text))
-    .then(data => {
-      preguntas = data;
-      estatDeLaPartida.preguntes = preguntas.map(pregunta => ({
-        id: pregunta.id,
-        feta: false,
-        resposta: null
-      }));
-      mostrarPregunta(indiceActual);
-      actualizarEstadoPartida();
-    })
-    .catch(error => console.error('Error al obtener preguntas:', error));
-}
-
-// Mostrar la pregunta actual
-function mostrarPregunta(indice) {
-  if (indice < 0 || indice >= preguntas.length) return;
-
-  let pregunta = preguntas[indice].pregunta;
-  let respostes = preguntas[indice].respostes;
-  let contenidoHTML = `
-    <div class="pregunta">${pregunta}</div>
-    <div class="imagen-container">
-      <img src="img/${preguntas[indice].imatge}" alt="Imagen de la pregunta" class="imagen-pregunta">
-    </div>
-    <div class="respuestas-container">
-  `;
-
-  respostes.forEach((respuesta, i) => {
-    let fondoColor = respuestasSeleccionadas[indice] == i ? 'background-color: green;' : '';
-    contenidoHTML += `
-      <button class="respuesta" data-indice="${indice}" data-opcion="${i}" style="${fondoColor}">
-        ${respuesta}
-      </button>
-    `;
-  });
-
-  contenidoHTML += `</div>`;
-  divPartida.innerHTML = contenidoHTML;
-  actualizarEstadoPartida();
-}
-
-divPartida.addEventListener("click", function (event) {
-  if (event.target.classList.contains("respuesta")) {
-    let indice = parseInt(event.target.getAttribute("data-indice"));
-    let opcion = parseInt(event.target.getAttribute("data-opcion"));
-    seleccionarRespuesta(indice, opcion);
-  }
-});
 
 // Seleccionar respuesta
 function seleccionarRespuesta(indice, opcion) {
-  if (indice < 0 || indice >= preguntas.length) return; // Evitar índices inválidos
-
-  respuestasSeleccionadas[indice] = respuestasSeleccionadas[indice] === opcion ? null : opcion;
-  estatDeLaPartida.preguntes[indice].feta = respuestasSeleccionadas[indice] !== null;
-
-  mostrarPregunta(indice);
-  actualizarEstadoPartida();
+    respuestasSeleccionadas[indice] = opcion;
 }
 
-// Navegar entre preguntas
-document.getElementById("siguientePregunta").addEventListener("click", function () {
-  if (indiceActual < preguntas.length - 1) {
-    indiceActual++;
-    mostrarPregunta(indiceActual);
-  } else {
-    finalizarQuiz();
-  }
+// Navegación entre preguntas
+btnSiguiente.addEventListener("click", function() {
+    if (indiceActual < preguntas.length - 1) {
+        indiceActual++;
+        mostrarPregunta(indiceActual);
+    } else {
+        finalizarPartida();
+    }
 });
 
-document.getElementById("anteriorPregunta").addEventListener("click", function () {
-  if (indiceActual > 0) {
-    indiceActual--;
-    mostrarPregunta(indiceActual);
-  }
+btnAnterior.addEventListener("click", function() {
+    if (indiceActual > 0) {
+        indiceActual--;
+        mostrarPregunta(indiceActual);
+    }
 });
 
-// Actualizar estado de la partida
-function actualizarEstadoPartida() {
-  let estadoHTML = `<div class="estado-partida">`;
+// Finalizar partida y mostrar resultados
+function finalizarPartida() {
+    let correctas = 0;
 
-  estatDeLaPartida.preguntes.forEach((pregunta, index) => {
-    let color = pregunta.feta ? (respuestasSeleccionadas[index] !== null ? 'green' : 'grey') : 'grey';
-    estadoHTML += `<button class="estado-boton" style="background-color: ${color};">${index + 1}</button>`;
-  });
+    preguntas.forEach((pregunta, indice) => {
+        if (pregunta.correcta === respuestasSeleccionadas[indice]) {
+            correctas++;
+        }
+    });
 
-  estadoHTML += '</div>';
-  divEstadoPartida.innerHTML = estadoHTML;
+    // Mostrar resultado final
+    divPartida.style.display = "none";
+    divResultado.style.display = "block";
+    resultadoTexto.innerText = `${nombreUsuario}, acertaste ${correctas} de ${preguntas.length} preguntas.`;
 }
 
-// Finalizar el quiz
-function finalizarQuiz() {
-  fetch('../back/finalitza.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ respuestas: respuestasSeleccionadas })
-  })
-    .then(response => response.json())
-    .then(data => {
-      divPartida.innerHTML = '';
-      divEstadoPartida.innerHTML = '';
-
-      // Mostrar solo el resultado final
-      let resultadoHTML = `<h3>Resultados</h3>`;
-      
-      // Mostrar total de correctas
-      resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-      
-      // Botón para reiniciar el test, centrado
-      resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-      
-      divResultado.innerHTML = resultadoHTML;
-
-      document.querySelector(".navegacion").style.display = "none";
-      
-      // Añadir el evento para reiniciar el test
-      document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-    })
-    .catch(error => console.error('Error al finalizar el quiz:', error));
-}
-
-// Reiniciar el quiz
-function reiniciarQuiz() {
-  respuestasSeleccionadas = [];
-  indiceActual = 0; // Reiniciar el índice actual
-  divResultado.innerHTML = ''; 
-  divPartida.style.display = "none"; // Ocultar la partida
-  divEstadoPartida.style.display = "none"; // Ocultar el estado de la partida
-  mostrarFormulariInici(); // Mostrar el formulario de inicio
-}
-
-// Cargamos el formulario de inicio al cargar la página
-document.addEventListener("DOMContentLoaded", mostrarFormulariInici);
+// Reiniciar la partida
+document.getElementById("reiniciar").addEventListener("click", function() {
+    divResultado.style.display = "none";
+    divInicio.style.display = "block";
+});
