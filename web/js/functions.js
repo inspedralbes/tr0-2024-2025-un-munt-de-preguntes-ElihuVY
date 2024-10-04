@@ -125,6 +125,38 @@ function actualizarEstadoPartida() {
   estadoHTML += '</div>';
   divEstadoPartida.innerHTML = estadoHTML;
 }
+let tiempoRestante = 60; // 1 minuto en segundos
+const temporizadorElemento = document.getElementById('temporizador');
+let intervalo;
+
+function iniciarTemporizador() {
+    intervalo = setInterval(actualizarTemporizador, 1000); // Actualiza cada segundo
+}
+
+function actualizarTemporizador() {
+    // Calcular los minutos y segundos restantes
+    const minutos = Math.floor(tiempoRestante / 60);
+    const segundos = tiempoRestante % 60;
+
+    // Mostrar el tiempo en el formato mm:ss
+    temporizadorElemento.textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+
+    // Verificar si el tiempo se ha agotado
+    if (tiempoRestante <= 0) {
+        clearInterval(intervalo); // Detiene el temporizador
+        temporizadorElemento.textContent = "Finalitza"; // Mostrar "Finalitza" cuando el tiempo termina
+        finalizarQuiz(); // Llamar a la función que finaliza el quiz
+    }
+
+    // Reducir el tiempo restante
+    tiempoRestante--;
+}
+
+// Llama a esta función cuando empiece la partida para inicializar el temporizador
+function iniciarPartida() {
+    obtenerPreguntas(10); // Inicializa las preguntas
+    iniciarTemporizador(); // Inicia el temporizador
+}
 
 function finalizarQuiz() {
   fetch('../back/finalitza.php', {
@@ -147,9 +179,12 @@ function finalizarQuiz() {
     }
 
 function reiniciarQuiz() {
+  clearInterval(intervalo); // Detener el temporizador
+  tiempoRestante = 60; // Reiniciar el temporizador
   divResultado.innerHTML = ''; 
   obtenerPreguntas(10); 
   document.querySelector(".navegacion").style.display = "flex"; 
+  iniciarTemporizador(); // Reiniciar el temporizador
 }
 
-obtenerPreguntas(10);
+iniciarPartida(); // Llamamos a la función para iniciar el test con temporizador
