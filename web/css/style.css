@@ -1,21 +1,3 @@
-#empezarTestContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh; /* Asegura que ocupe toda la pantalla */
-}
-
-#empezarTest {
-    padding: 15px 30px; /* Aumenta el tamaño del botón */
-    font-size: 18px; /* Asegura que el texto sea lo suficientemente grande */
-    background-color: #3498DB;
-    border: none;
-    color: #ECF0F1;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
 body {
     background-color: #092847; 
     display: flex;

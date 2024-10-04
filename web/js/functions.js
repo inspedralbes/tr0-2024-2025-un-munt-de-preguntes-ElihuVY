@@ -149,19 +149,24 @@ function actualizarTemporizador() {
 }
 
 document.getElementById("empezarTest").addEventListener("click", function() {
-  // Ocultar el botón de empezar y mostrar el temporizador y el test
+  iniciarTest();
+});
+
+// Agregar manejo de evento para pantallas táctiles
+document.getElementById("empezarTest").addEventListener("touchstart", function() {
+  iniciarTest();
+});
+
+function iniciarTest() {
   document.getElementById("empezarTestContainer").style.display = "none";
   document.getElementById("temporizador-container").style.display = "block";
   document.getElementById("partida").style.display = "block";
   document.getElementById("estadoPartida").style.display = "block";
   document.querySelector(".navegacion").style.display = "flex";
-
-  // Iniciar el temporizador
   iniciarTemporizador();
-
-  // Iniciar el test (cargar preguntas)
   obtenerPreguntas(10);
-});
+}
+
 
 function finalizarQuiz() {
   clearInterval(intervalo);
