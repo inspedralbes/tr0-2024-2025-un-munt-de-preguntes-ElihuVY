@@ -20,7 +20,6 @@ h1 {
     text-align: center;
 }
 
-/* Preguntas y respuestas */
 .pregunta {
     font-size: 24px;
     margin-bottom: 20px;
@@ -33,12 +32,13 @@ h1 {
 }
 
 .imagen-pregunta {
-    max-width: 70%; /* La imagen ocupa como máximo el 100% del contenedor */
-    height: auto;
-    width: 400px; /* Tamaño fijo de la imagen para evitar cambios de tamaño drásticos */
+    width: 400px; /* Tamaño fijo de la imagen */
+    height: 300px; /* Fija también la altura para evitar cambios de tamaño */
+    max-width: 100%; /* Evita que la imagen sobrepase el tamaño máximo del contenedor */
     border-radius: 8px;
-    object-fit: contain; /* Se ajusta para que siempre se muestre bien */
+    object-fit: cover; /* Hace que la imagen cubra el área del contenedor sin deformarse */
 }
+
 
 .respuestas-container {
     display: flex;
