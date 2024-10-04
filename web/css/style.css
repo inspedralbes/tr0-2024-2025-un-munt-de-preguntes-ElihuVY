@@ -32,11 +32,11 @@ h1 {
 }
 
 .imagen-pregunta {
-    width: 400px; /* Tamaño fijo de la imagen */
-    height: 300px; /* Fija también la altura para evitar cambios de tamaño */
-    max-width: 100%; /* Evita que la imagen sobrepase el tamaño máximo del contenedor */
+    width: 300px; /* Tamaño más pequeño de la imagen */
+    height: 200px; /* Ajuste de la altura */
+    max-width: 100%; /* Sigue limitando el ancho máximo al 100% del contenedor */
     border-radius: 8px;
-    object-fit: cover; /* Hace que la imagen cubra el área del contenedor sin deformarse */
+    object-fit: cover; /* Asegura que la imagen cubra el área del contenedor sin deformarse */
 }
 
 
