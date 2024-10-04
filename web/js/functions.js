@@ -116,7 +116,7 @@ function actualizarEstadoPartida() {
   estatDeLaPartida.preguntes.forEach((pregunta, index) => {
     let color = 'grey'; 
     if (pregunta.feta && respuestasSeleccionadas[index] !== null) {
-        color = 'green'; 
+        color = '#d8890b'; 
     }
     estadoHTML += `<button class="estado-boton" style="background-color: ${color};">${index + 1}</button>`;
 });
