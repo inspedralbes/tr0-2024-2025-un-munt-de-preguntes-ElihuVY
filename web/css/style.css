@@ -43,7 +43,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     width: 100%;
 }
 
@@ -100,6 +100,7 @@ h1 {
     flex: 1; /* Toma todo el espacio disponible */
     text-align: center;
     margin: 0 5px; /* Espacio entre los botones */
+    margin-bottom: 5px;
 }
 
 .boton-nav:hover {
