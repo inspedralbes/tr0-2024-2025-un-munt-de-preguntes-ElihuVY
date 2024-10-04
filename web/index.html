@@ -8,18 +8,25 @@
 </head>
 <body>
     <h1>TEST DE CONDUCIR</h1>
-    <div id="temporizador-container">
-        <h2>Tiempo restante: <span id="temporizador">01:00</span></h2>
-    </div>
-    <div id="partida"></div> 
-    <div id="estadoPartida"></div>    
 
-    <div class="navegacion">
-        <button id="anteriorPregunta" class="boton-nav">Anterior</button>
-        <button id="siguientePregunta" class="boton-nav">Siguiente</button>
-    </div>
+<div id="empezarTestContainer">
+    <button id="empezarTest" class="boton-nav">Empezar Test</button>
+</div>
 
-    <div id="resultado"></div> 
+<div id="temporizador-container" style="display: none;">
+    <h2>Tiempo restante: <span id="temporizador">01:00</span></h2>
+</div>
+
+<div id="partida" style="display: none;"></div> 
+<div id="estadoPartida" style="display: none;"></div>    
+
+<div class="navegacion" style="display: none;">
+    <button id="anteriorPregunta" class="boton-nav">Anterior</button>
+    <button id="siguientePregunta" class="boton-nav">Siguiente</button>
+</div>
+
+<div id="resultado"></div>
+
     
     <script src="js/functions.js"></script>
 </body>

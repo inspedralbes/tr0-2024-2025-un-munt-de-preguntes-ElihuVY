@@ -134,23 +134,34 @@ function iniciarTemporizador() {
 }
 
 function actualizarTemporizador() {
-    // Calcular los minutos y segundos restantes
     const minutos = Math.floor(tiempoRestante / 60);
     const segundos = tiempoRestante % 60;
-
-    // Mostrar el tiempo en el formato mm:ss
     temporizadorElemento.textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
 
-    // Verificar si el tiempo se ha agotado
     if (tiempoRestante <= 0) {
         clearInterval(intervalo); // Detiene el temporizador
-        temporizadorElemento.textContent = "Finalitza"; // Mostrar "Finalitza" cuando el tiempo termina
+        temporizadorElemento.textContent = "SE ACABO EL TIEMPO"; // Mostrar "Finalitza" cuando el tiempo termina
         finalizarQuiz(); // Llamar a la función que finaliza el quiz
     }
 
     // Reducir el tiempo restante
     tiempoRestante--;
 }
+
+document.getElementById("empezarTest").addEventListener("click", function() {
+  // Ocultar el botón de empezar y mostrar el temporizador y el test
+  document.getElementById("empezarTestContainer").style.display = "none";
+  document.getElementById("temporizador-container").style.display = "block";
+  document.getElementById("partida").style.display = "block";
+  document.getElementById("estadoPartida").style.display = "block";
+  document.querySelector(".navegacion").style.display = "flex";
+
+  // Iniciar el temporizador
+  iniciarTemporizador();
+
+  // Iniciar el test (cargar preguntas)
+  obtenerPreguntas(10);
+});
 
 // Llama a esta función cuando empiece la partida para inicializar el temporizador
 function iniciarPartida() {
@@ -187,4 +198,8 @@ function reiniciarQuiz() {
   iniciarTemporizador(); // Reiniciar el temporizador
 }
 
-iniciarPartida(); // Llamamos a la función para iniciar el test con temporizador
+// Inicializar el test al hacer clic en el botón
+function iniciarPartida() {
+  obtenerPreguntas(10); // Inicializa las preguntas
+  iniciarTemporizador(); // Inicia el temporizador
+}
