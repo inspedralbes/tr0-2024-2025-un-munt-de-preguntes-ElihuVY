@@ -152,11 +152,6 @@ document.getElementById("empezarTest").addEventListener("click", function() {
   iniciarTest();
 });
 
-// Agregar manejo de evento para pantallas táctiles
-document.getElementById("empezarTest").addEventListener("touchstart", function() {
-  iniciarTest();
-});
-
 function iniciarTest() {
   document.getElementById("empezarTestContainer").style.display = "none";
   document.getElementById("temporizador-container").style.display = "block";
