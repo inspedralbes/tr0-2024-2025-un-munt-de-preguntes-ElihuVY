@@ -163,13 +163,8 @@ document.getElementById("empezarTest").addEventListener("click", function() {
   obtenerPreguntas(10);
 });
 
-// Llama a esta función cuando empiece la partida para inicializar el temporizador
-function iniciarPartida() {
-    obtenerPreguntas(10); // Inicializa las preguntas
-    iniciarTemporizador(); // Inicia el temporizador
-}
-
 function finalizarQuiz() {
+  clearInterval(intervalo);
   fetch('../back/finalitza.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
