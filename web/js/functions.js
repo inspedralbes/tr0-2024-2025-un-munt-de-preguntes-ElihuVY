@@ -174,7 +174,7 @@ function finalizarQuiz() {
       divPartida.innerHTML = '';
       divEstadoPartida.innerHTML = '';
     let resultadoHTML = `<h3>Resultados</h3>`;
-    resultadoHTML += `<p>${data.correctas} / 10 correctas</p>`;
+    resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
     resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
     divResultado.innerHTML = resultadoHTML;
     document.querySelector(".navegacion").style.display = "none";
