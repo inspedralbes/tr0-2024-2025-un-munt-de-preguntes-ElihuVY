@@ -121,8 +121,46 @@ function actualizarEstadoPartida() {
   estadoHTML += '</div>'; 
   divEstadoPartida.innerHTML = estadoHTML;
 }
+let tiempoRestante = 60; // 1 minuto en segundos
+const temporizadorElemento = document.getElementById('temporizador');
+let intervalo;
+
+function iniciarTemporizador() {
+    intervalo = setInterval(actualizarTemporizador, 1000); // Actualiza cada segundo
+}
+
+function actualizarTemporizador() {
+    const minutos = Math.floor(tiempoRestante / 60);
+    const segundos = tiempoRestante % 60;
+    temporizadorElemento.textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+
+    if (tiempoRestante <= 0) {
+        clearInterval(intervalo); // Detiene el temporizador
+        temporizadorElemento.textContent = "SE ACABO EL TIEMPO"; // Mostrar "Finalitza" cuando el tiempo termina
+        finalizarQuiz(); // Llamar a la función que finaliza el quiz
+    }
+
+    // Reducir el tiempo restante
+    tiempoRestante--;
+}
+
+document.getElementById("empezarTest").addEventListener("click", function() {
+  iniciarTest();
+});
+
+function iniciarTest() {
+  document.getElementById("empezarTestContainer").style.display = "none";
+  document.getElementById("temporizador-container").style.display = "block";
+  document.getElementById("partida").style.display = "block";
+  document.getElementById("estadoPartida").style.display = "block";
+  document.querySelector(".navegacion").style.display = "flex";
+  iniciarTemporizador();
+  obtenerPreguntas(10);
+}
+
 
 function finalizarQuiz() {
+  clearInterval(intervalo);
   fetch('../back/finalitza.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -146,6 +184,8 @@ function finalizarQuiz() {
 
 
 function reiniciarQuiz() {
+  clearInterval(intervalo); // Detener el temporizador
+  tiempoRestante = 60; // Reiniciar el temporizador
   divResultado.innerHTML = ''; 
   obtenerPreguntas(10); 
   document.querySelector(".navegacion").style.display = "flex";
