@@ -2,11 +2,32 @@
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TEST CONDUCIR</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <h1>TEST DE CONDUCIR</h1>
+
+<div id="empezarTestContainer">
+    <button id="empezarTest" class="boton-nav">EMPEZAR</button>
+</div>
+
+<div id="temporizador-container" style="display: none;">
+    <h2><span id="temporizador">01:00</span></h2>
+</div>
+
+<div id="partida" style="display: none;"></div> 
+<div id="estadoPartida" style="display: none;"></div>    
+
+<div class="navegacion" style="display: none;">
+    <button id="anteriorPregunta" class="boton-nav">Anterior</button>
+    <button id="siguientePregunta" class="boton-nav">Siguiente</button>
+</div>
+
+<div id="resultado"></div>
+
     
+    <script src="js/functions.js"></script>
 </body>
 </html>
