@@ -1,112 +1,109 @@
-let preguntas = [];
-let respuestasSeleccionadas = [];
-let indiceActual = 0;
+let preguntas = []; 
+let respuestasSeleccionadas = []; 
+let indiceActual = 0; 
 
-let divPartida = document.getElementById("partida");
+let divPartida = document.getElementById("partida"); 
 let divResultado = document.getElementById("resultado");
-let divEstadoPartida = document.getElementById("estadoPartida");
+let divEstadoPartida = document.getElementById("estadoPartida"); 
 
 let estatDeLaPartida = {
   contadorPreguntes: 0,
-  preguntes: []
+  preguntes: [] 
 };
-
 function obtenerPreguntas(cantidad) {
-  preguntas = [];
+  preguntas = []; 
   respuestasSeleccionadas = [];
-  indiceActual = 0;
+  indiceActual = 0; 
 
   fetch(`../back/getPreguntes.php?cantidad=${cantidad}`)
     .then(response => {
       console.log('Respuesta del servidor:', response);
-      return response.text(); // cambiar a text() para ver qué está devolviendo el servidor
+      return response.text();
     })
     .then(text => {
-      console.log('Texto recibido:', text); // Imprimir el texto para ver si es válido
-      return JSON.parse(text); // Intenta convertirlo a JSON
+      console.log('Texto recibido:', text);
+      return JSON.parse(text); 
     })
     .then(data => {
-      preguntas = data;
+      preguntas = data; 
       estatDeLaPartida.preguntes = preguntas.map(pregunta => ({
         id: pregunta.id,
-        feta: false,
-        resposta: null
+        feta: false, 
+        resposta: null 
       }));
       mostrarPregunta(indiceActual);
-      actualizarEstadoPartida();
+      actualizarEstadoPartida(); 
     })
     .catch(error => console.error('Error al obtener preguntas:', error));
 }
 
-
 function mostrarPregunta(indice) {
     if (indice < 0 || indice >= preguntas.length) return;
-  
+
     let pregunta = preguntas[indice].pregunta;
     let respostes = preguntas[indice].respostes;
     let contenidoHTML = `
-      <div class="pregunta">${pregunta}</div>
+      <div class="pregunta">${pregunta}</div> 
       <div class="imagen-container">
         <img src="img/${preguntas[indice].imatge}" alt="Imagen de la pregunta" class="imagen-pregunta">
       </div>
       <div class="respuestas-container">
-    `;
-  
-    respostes.forEach((respuesta, i) => {
-      let fondoColor = ''; // no color
+    `; 
+      
+      respostes.forEach((respuesta, i) => {
+      let fondoColor = ''; 
       if (respuestasSeleccionadas[indice] == i) {
-        fondoColor = 'background-color: green;'; // seleccionada = verde
+        fondoColor = 'background-color: green;';
       }
       contenidoHTML += `
         <button class="respuesta" data-indice="${indice}" data-opcion="${i}" style="${fondoColor}">
           ${respuesta}
         </button>
-      `;
+      `; 
     });
-  
-    contenidoHTML += `</div>`;
-    divPartida.innerHTML = contenidoHTML;
+
+    contenidoHTML += `</div>`; 
+    divPartida.innerHTML = contenidoHTML; 
     actualizarEstadoPartida();
-  }
-  
+}
 
 divPartida.addEventListener("click", function (event) {
-  if (event.target.classList.contains("respuesta")) {
-    let indice = parseInt(event.target.getAttribute("data-indice"));
-    let opcion = parseInt(event.target.getAttribute("data-opcion"));
-    seleccionarRespuesta(indice, opcion);
+  if (event.target.classList.contains("respuesta")) { 
+    let indice = parseInt(event.target.getAttribute("data-indice")); 
+    let opcion = parseInt(event.target.getAttribute("data-opcion")); 
+    seleccionarRespuesta(indice, opcion); 
   }
 });
 
+
 function seleccionarRespuesta(indice, opcion) {
     if (indice < 0 || indice >= preguntas.length) return; 
-  
+
     if (respuestasSeleccionadas[indice] === opcion) {
-      respuestasSeleccionadas[indice] = null; // desmarcar
+      respuestasSeleccionadas[indice] = null; 
     } else {
-      respuestasSeleccionadas[indice] = opcion; // nueva opción
+      respuestasSeleccionadas[indice] = opcion; 
     }
-  
+
     estatDeLaPartida.preguntes[indice].feta = respuestasSeleccionadas[indice] !== null;
-  
-    mostrarPregunta(indice);
-    actualizarEstadoPartida();
-  }
-  
+    mostrarPregunta(indice); 
+    actualizarEstadoPartida(); 
+}
+
 
 document.getElementById("siguientePregunta").addEventListener("click", function () {
   if (indiceActual < preguntas.length - 1) {
-    indiceActual++;
-    mostrarPregunta(indiceActual);
+    indiceActual++; 
+    mostrarPregunta(indiceActual); 
   } else {
-    finalizarQuiz();
+    finalizarQuiz(); 
   }
 });
 
 document.getElementById("anteriorPregunta").addEventListener("click", function () {
   if (indiceActual > 0) {
-    indiceActual--;
-    mostrarPregunta(indiceActual);
+    indiceActual--; 
+    mostrarPregunta(indiceActual); 
   }
 });
 
@@ -116,13 +113,12 @@ function actualizarEstadoPartida() {
   estatDeLaPartida.preguntes.forEach((pregunta, index) => {
     let color = 'grey'; 
     if (pregunta.feta && respuestasSeleccionadas[index] !== null) {
-        color = 'green'; 
+        color = 'green';
     }
-    estadoHTML += `<button class="estado-boton" style="background-color: ${color};">${index + 1}</button>`;
-});
+    estadoHTML += `<button class="estado-boton" style="background-color: ${color};">${index + 1}</button>`; 
+  });
 
-
-  estadoHTML += '</div>';
+  estadoHTML += '</div>'; 
   divEstadoPartida.innerHTML = estadoHTML;
 }
 
@@ -132,24 +128,27 @@ function finalizarQuiz() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ respuestas: respuestasSeleccionadas })
   })
-    .then(response => response.json())
+    .then(response => response.json()) 
     .then(data => {
-      divPartida.innerHTML = '';
-      divEstadoPartida.innerHTML = '';
-    let resultadoHTML = `<h3>Resultados</h3>`;
-    resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
-    resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
-    divResultado.innerHTML = resultadoHTML;
-    document.querySelector(".navegacion").style.display = "none";
-    document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz);
-  })
-  .catch(error => console.error('Error al finalizar el quiz:', error));
-    }
+      divPartida.innerHTML = ''; 
+      divEstadoPartida.innerHTML = ''; 
+
+      let resultadoHTML = `<h3>Resultados</h3>`;
+      resultadoHTML += `<p>${data.correctas} / ${data.total} correctas</p>`;
+      resultadoHTML += `<div class="centrar-boton"><button id="reiniciarTest" class="reiniciar-boton">Reiniciar Test</button></div>`;
+      divResultado.innerHTML = resultadoHTML;
+
+      document.querySelector(".navegacion").style.display = "none"; 
+      document.getElementById("reiniciarTest").addEventListener("click", reiniciarQuiz); 
+    })
+    .catch(error => console.error('Error al finalizar el quiz:', error));
+}
+
 
 function reiniciarQuiz() {
   divResultado.innerHTML = ''; 
   obtenerPreguntas(10); 
-  document.querySelector(".navegacion").style.display = "flex"; 
+  document.querySelector(".navegacion").style.display = "flex";
 }
 
 obtenerPreguntas(10);
